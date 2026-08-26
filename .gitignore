@@ -1,0 +1,25 @@
+# --- Backend (Java / Spring Boot / Gradle-Maven) ---
+target/
+build/
+*.class
+.gradle/
+!gradle/wrapper/gradle-wrapper.jar
+
+# --- Frontend (Angular / Node) ---
+node_modules/
+dist/
+.angular/
+
+# --- IDE ---
+.idea/
+*.iml
+.vscode/
+
+# --- OS ---
+.DS_Store
+Thumbs.db
+
+# --- Environnement ---
+.env
+.env.local
+*.log
