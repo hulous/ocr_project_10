@@ -1,0 +1,46 @@
+# Résumé technique — architecture cible
+
+> Ce document résume, pour un développeur qui rejoint le projet,
+> l'essentiel de la [proposition d'architecture](Proposition_architecture_YourCarYourWay.odt)
+> complète. En cas de doute, le document complet fait référence.
+
+## Style architectural
+
+Monolithe modulaire exposant une API REST unique, consommée par le
+client web (Angular) et par les applications agence existantes.
+Découpage interne en modules par domaine métier (compte, catalogue &
+réservation, paiement, notification — voir diagramme ci-dessous), pour
+rester cohérent avec le périmètre du projet sans la complexité
+opérationnelle d'une architecture en microservices.
+
+![Diagramme de composants](diagrams/diagram_components.png)
+
+## Stack retenue
+
+| Couche | Choix | Pourquoi (résumé) |
+|---|---|---|
+| Frontend | Angular | Cohérent avec le socle déjà maîtrisé en interne et avec l'application la plus fiable de l'audit (US) |
+| Backend | Java 21 / Spring Boot | Écosystème mature, aligné avec le template interne déjà utilisé sur d'autres projets |
+| Base de données | PostgreSQL | Transactions ACID adaptées aux réservations et paiements |
+| Authentification | JWT (access + refresh token), mots de passe hachés en bcrypt | Meilleure pratique identifiée dans l'audit de l'existant |
+| Paiement | Délégué à un prestataire externe (ex. Stripe) | Aucune donnée bancaire stockée côté Your Car Your Way |
+| Conteneurisation | Docker | Reproductibilité des environnements |
+
+Le détail des comparaisons (options écartées et pourquoi) est en
+section 8 de la proposition d'architecture complète.
+
+## Modèle de données (vue simplifiée)
+
+![Diagramme de classes](diagrams/diagram_classes.png)
+
+## Déploiement
+
+![Diagramme de déploiement](diagrams/diagram_deployment.png)
+
+## Ce que le PoC de ce dépôt valide spécifiquement
+
+Le PoC porte uniquement sur la fonctionnalité de tchat et vise à
+vérifier que l'architecture ci-dessus supporte un flux **temps réel**
+(WebSocket/STOMP côté backend), en complément des échanges REST
+classiques déjà couverts par le reste du cahier des charges. Voir
+[`POC_CHAT.md`](POC_CHAT.md) pour le détail du scénario.
