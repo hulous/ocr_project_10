@@ -18,7 +18,7 @@ Spring Boot base project with:
 
 ## Project Structure
 
-- Application entry point: src/main/java/com/hulous/base/BaseApplication.java
+- Application entry point: src/main/java/com/ycyw/chatapi/ChatApiApplication.java
 - Main config: src/main/resources/application.yaml
 - Environment values: src/main/resources/env.properties
 - Example environment values: .env.sample.properties
