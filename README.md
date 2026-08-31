@@ -76,6 +76,20 @@ issues GitHub, cf. ci-dessous) consistent à :
 Une fois ces étapes réalisées, cette section sera mise à jour avec les
 commandes exactes pour lancer le projet en local.
 
+## Lancer la stack localement
+
+Le projet peut désormais être démarré avec Docker Compose depuis la racine du dépôt :
+
+```bash
+docker compose up --build
+```
+
+Puis ouvrir :
+
+- `http://localhost:4250` pour l'interface Angular
+- `http://localhost:8050` pour l'API backend
+- `postgres://ycyw:ycyw@localhost:5532/ycyw_poc` pour la base PostgreSQL
+
 ## 🗓️ Gestion de projet
 
 La feuille de route est suivie via les **milestones** et **issues**
