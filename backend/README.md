@@ -6,6 +6,18 @@ Module backend du PoC, en Java 21 / Spring Boot.
 > structure attendue. Le code sera ajouté au fil des issues du milestone
 > « PoC — Fonctionnalité de tchat ».
 
+## Build
+
+Ce module peut être vérifié localement avec Maven :
+
+```bash
+cd backend
+mvn -q verify
+```
+
+Note : les versions compatibles utilisées pour ce projet sont
+`maven-checkstyle-plugin:3.4.0` et `spotless-maven-plugin:3.10.0`.
+
 ## Contenu attendu (à venir)
 
 - API REST minimale (authentification réutilisant les principes JWT
