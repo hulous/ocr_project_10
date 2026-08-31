@@ -1,18 +1,15 @@
 spring:
   application:
     name: ycywapi
-  config:
-    import: "./.env.properties"
   datasource:
-    url: "jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}?sslmode=disable"
-    username: "${DB_USER}"
-    password: "${DB_PASSWORD}"
+    url: "jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}?sslmode=disable"
+    username: "${POSTGRES_USER}"
+    password: "${POSTGRES_PASSWORD}"
   jpa:
     hibernate:
       ddl-auto: none
     open-in-view: false
   liquibase:
-    enabled: true
     change-log: classpath:db/changelog/db.changelog-master.yaml
 
 server:
@@ -21,9 +18,4 @@ server:
 security:
   jwt:
     secret-key: "${JWT_SECRET_TOKEN}"
-    expiration-minutes: 60
-
-logging:
-  level:
-    root: DEBUG
-    com.example: TRACE
+    expiration-time: 3600000 # 1h in millisecond
