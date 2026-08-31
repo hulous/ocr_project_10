@@ -1,0 +1,23 @@
+spring:
+  config:
+    import: "./env.test.properties"
+  datasource:
+    url: "jdbc:h2:mem:base_app_db_test;DB_CLOSE_DELAY=-1;MODE=PostgreSQL;DATABASE_TO_UPPER=FALSE"
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: ""
+  jpa:
+    hibernate:
+      ddl-auto: none
+    open-in-view: false
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+    enabled: true
+
+server:
+  port: "${MAIN_APP_PORT}"
+
+security:
+  jwt:
+    secret-key: "${JWT_SECRET_TOKEN}"
+    expiration-time: 3600000
