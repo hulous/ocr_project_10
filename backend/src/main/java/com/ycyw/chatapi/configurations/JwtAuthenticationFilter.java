@@ -27,7 +27,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     "/api/auth/register",
     "/v3/api-docs",
     "/swagger-ui",
-    "/uploads/"
+    "/uploads/",
+    "/ws/"
   );
 
   private final HandlerExceptionResolver handlerExceptionResolver;

@@ -27,7 +27,8 @@ public class SecurityConfiguration {
     "/v3/api-docs/**",
     "/swagger-ui/**",
     "/swagger-ui.html",
-    "/uploads/**"
+    "/uploads/**",
+    "/ws/**"
   };
 
   public SecurityConfiguration(JwtAuthenticationFilter jwtAuthenticationFilter, AuthenticationProvider authenticationProvider) {
