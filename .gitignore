@@ -20,6 +20,10 @@ dist/
 Thumbs.db
 
 # --- Environnement ---
+*.log
 .env
 .env.local
-*.log
+/.env*
+.env
+.env.*
+**/.env*
