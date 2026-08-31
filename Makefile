@@ -19,13 +19,13 @@ logs: ## Follow local service logs
 build: ## Build local services
 	$(COMPOSE) build
 
-app-up: ## Start app local services
+up: ## Start app local services
 	$(COMPOSE) up
 
-app-upd: ## Start app local services in detached mode
+upd: ## Start app local services in detached mode
 	$(COMPOSE) up -d
 
-app-run: ## Build and run the app and database through Docker Compose
+run: ## Build and run the app and database through Docker Compose
 	$(COMPOSE) up --build
 
 down: ## Stop local services
