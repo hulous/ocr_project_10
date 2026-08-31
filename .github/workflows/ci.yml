@@ -20,6 +20,13 @@ jobs:
         with:
           distribution: temurin
           java-version: '21'
+      - name: Cache Maven local repository
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('backend/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
       - name: Build and verify backend
         working-directory: backend
         run: mvn -q verify
@@ -32,9 +39,19 @@ jobs:
         uses: actions/setup-node@v5
         with:
           node-version: '22'
+      - name: Cache npm cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-npm-${{ hashFiles('frontend/package.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-
       - name: Install frontend dependencies
         working-directory: frontend
         run: npm install
+      - name: Run frontend build
+        working-directory: frontend
+        run: npm run build
       - name: Run frontend lint
         working-directory: frontend
         run: npm run lint
