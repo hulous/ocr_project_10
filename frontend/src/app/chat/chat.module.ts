@@ -6,6 +6,6 @@ import { ChatRoutingModule } from './chat-routing.module';
 
 @NgModule({
   declarations: [ChatComponent],
-  imports: [CommonModule, FormsModule, ChatRoutingModule]
+  imports: [CommonModule, FormsModule, ChatRoutingModule],
 })
 export class ChatModule {}

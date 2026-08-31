@@ -13,6 +13,6 @@ import { Component } from '@angular/core';
       </main>
     </div>
   `,
-  styles: []
+  styles: [],
 })
 export class AppComponent {}
