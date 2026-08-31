@@ -37,6 +37,21 @@ section 8 de la proposition d'architecture complète.
 
 ![Diagramme de déploiement](diagrams/diagram_deployment.png)
 
+## Comment exécuter ce PoC
+
+La meilleure manière de démarrer la preuve de concept est d'utiliser
+Docker Compose depuis la racine du dépôt :
+
+```bash
+docker compose up --build
+```
+
+Ensuite, ouvrez :
+
+- `http://localhost:4250` pour l'interface Angular
+- `http://localhost:8050` pour le backend
+- `http://localhost:8050/swagger-ui/index.html` pour l'API docs
+
 ## Ce que le PoC de ce dépôt valide spécifiquement
 
 Le PoC porte uniquement sur la fonctionnalité de tchat et vise à

@@ -20,14 +20,14 @@ Spring Boot base project with:
 
 - Application entry point: src/main/java/com/ycyw/chatapi/ChatApiApplication.java
 - Main config: src/main/resources/application.yaml
-- Environment values: .env
+- Environment values: root `.env` for Docker Compose, or environment variables for direct execution
 - Example environment values: backend/.env.sample.properties
 
 ## Environment Configuration
 
-The app reads env values from environment variables. Docker Compose loads these values from the root `.env` file.
+The app reads environment values from environment variables. Docker Compose loads these values from the repository root `.env` file.
 
-1. Copy the sample file:
+1. Copy the sample file to the repo root if needed for local Compose usage:
 
 ```bash
 cp backend/.env.sample.properties .env
@@ -37,7 +37,7 @@ cp backend/.env.sample.properties .env
 
 Required keys:
 
-- POSTGRES_NAME
+- POSTGRES_DB
 - POSTGRES_HOST
 - POSTGRES_PORT
 - POSTGRES_USER
@@ -52,7 +52,13 @@ Notes:
 
 ## Run the Application
 
-Start with Maven:
+Preferred mode (from repository root):
+
+```bash
+docker compose up --build
+```
+
+Direct backend run (from `backend/`) :
 
 ```bash
 mvn spring-boot:run
@@ -82,6 +88,11 @@ mvn test
 Once the app is running, OpenAPI UI is available at:
 
 - http://localhost:${MAIN_APP_PORT}/swagger-ui/index.html
+
+## Ports et endpoints
+
+- Backend API : http://localhost:8050
+- Swagger/OpenAPI UI : http://localhost:8050/swagger-ui/index.html
 
 ## Database Migrations
 
