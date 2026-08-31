@@ -37,11 +37,11 @@ cp backend/.env.sample.properties .env
 
 Required keys:
 
-- DB_NAME
-- DB_HOST
-- DB_PORT
-- DB_USER
-- DB_PASSWORD
+- POSTGRES_NAME
+- POSTGRES_HOST
+- POSTGRES_PORT
+- POSTGRES_USER
+- POSTGRES_PASSWORD
 - JWT_SECRET_TOKEN
 - MAIN_APP_PORT
 

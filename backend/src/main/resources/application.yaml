@@ -2,9 +2,9 @@ spring:
   application:
     name: ycywapi
   datasource:
-    url: "jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}?sslmode=disable"
-    username: "${DB_USER}"
-    password: "${DB_PASSWORD}"
+    url: "jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}?sslmode=disable"
+    username: "${POSTGRES_USER}"
+    password: "${POSTGRES_PASSWORD}"
   jpa:
     hibernate:
       ddl-auto: none
