@@ -1,0 +1,49 @@
+{
+  "root": true,
+  "ignorePatterns": [
+    "**/node_modules/**",
+    "**/dist/**",
+    "frontend/dist",
+    "backend/target"
+  ],
+  "overrides": [
+    {
+      "files": ["*.ts"],
+      "parser": "@typescript-eslint/parser",
+      "parserOptions": {
+        "project": ["tsconfig.json"],
+        "createDefaultProgram": true,
+        "ecmaVersion": 2020,
+        "sourceType": "module"
+      },
+      "plugins": ["@typescript-eslint", "prettier"],
+      "extends": [
+        "plugin:@angular-eslint/recommended",
+        "plugin:@angular-eslint/template/process-inline-templates",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:prettier/recommended"
+      ],
+      "rules": {
+        "prettier/prettier": "error",
+        "@typescript-eslint/no-unused-vars": [
+          "warn",
+          {
+            "argsIgnorePattern": "^_",
+            "varsIgnorePattern": "^_",
+            "caughtErrorsIgnorePattern": "^_"
+          }
+        ],
+        "@typescript-eslint/no-explicit-any": "warn",
+        "@angular-eslint/use-lifecycle-interface": "warn",
+        "@angular-eslint/no-empty-lifecycle-method": "warn"
+      }
+    },
+    {
+      "files": ["*.html"],
+      "extends": ["plugin:@angular-eslint/template/recommended", "plugin:prettier/recommended"],
+      "rules": {
+        "prettier/prettier": "error"
+      }
+    }
+  ]
+}
