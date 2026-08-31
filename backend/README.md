@@ -20,20 +20,20 @@ Spring Boot base project with:
 
 - Application entry point: src/main/java/com/ycyw/chatapi/ChatApiApplication.java
 - Main config: src/main/resources/application.yaml
-- Environment values: src/main/resources/env.properties
-- Example environment values: .env.sample.properties
+- Environment values: .env
+- Example environment values: backend/.env.sample.properties
 
 ## Environment Configuration
 
-The app imports env values from src/main/resources/env.properties.
+The app reads env values from environment variables. Docker Compose loads these values from the root `.env` file.
 
 1. Copy the sample file:
 
 ```bash
-cp .env.sample.properties src/main/resources/env.properties
+cp backend/.env.sample.properties .env
 ```
 
-2. Update values in src/main/resources/env.properties.
+2. Update values in `.env`.
 
 Required keys:
 
