@@ -6,7 +6,11 @@
     "ng": "ng",
     "start": "ng serve --host 0.0.0.0 --port 4200 --proxy-config proxy.conf.json",
     "build": "ng build",
-    "test": "ng test"
+    "test": "ng test",
+    "lint": "eslint \"src/**/*.{ts,html}\"",
+    "lint:fix": "eslint \"src/**/*.{ts,html}\" --fix",
+    "format": "prettier --write \"src/**/*.{ts,html,css,json,md}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,html,css,json,md}\""
   },
   "dependencies": {
     "@angular/animations": "^17.2.0",
@@ -33,6 +37,17 @@
     "karma-coverage": "^2.2.0",
     "karma-jasmine": "^5.1.0",
     "karma-jasmine-html-reporter": "^2.0.0",
-    "typescript": "~5.6.0"
+    "typescript": "~5.6.0",
+    "@angular-eslint/builder": "^17.3.0",
+    "@angular-eslint/eslint-plugin": "^17.3.0",
+    "@angular-eslint/eslint-plugin-template": "^17.3.0",
+    "@angular-eslint/schematics": "^17.3.0",
+    "@angular-eslint/template-parser": "^17.3.0",
+    "@typescript-eslint/eslint-plugin": "^7.9.0",
+    "@typescript-eslint/parser": "^7.9.0",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.1.4",
+    "prettier": "^3.0.0"
   }
 }
