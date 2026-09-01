@@ -1,23 +1,17 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
-
-export interface LoginCredentials {
-  email: string;
-  password: string;
-}
-
-export interface LoginResponse {
-  token: string;
-  expiresIn: number;
-}
+import { LoginCredentials } from '../models/login-request.interface';
+import { LoginResponse } from '../models/login-response.interface';
+import { RegisterRequest } from '../models/register-request.interface';
+import { UserResponse } from '../models/user-response.interface';
 
 interface StoredAuthentication extends LoginResponse {
   email: string;
 }
 
 @Injectable({ providedIn: 'root' })
-export class AuthenticationService {
+export class AuthService {
   private readonly storageKey = 'ycyw.authentication';
   private readonly loginUrl = '/api/auth/login';
 
@@ -29,6 +23,10 @@ export class AuthenticationService {
         this.storeAuthentication({ ...response, email: credentials.email });
       }),
     );
+  }
+
+  register(request: RegisterRequest): Observable<UserResponse> {
+    return this.http.post<UserResponse>('/api/auth/register', request);
   }
 
   logout(): void {

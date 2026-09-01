@@ -1,18 +1,18 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { AuthenticationService } from './authentication.service';
+import { AuthService } from './auth';
 
 describe('AuthenticationService', () => {
-  let service: AuthenticationService;
+  let service: AuthService;
   let httpTestingController: HttpTestingController;
 
   beforeEach(() => {
     localStorage.clear();
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [AuthenticationService],
+      providers: [AuthService],
     });
-    service = TestBed.inject(AuthenticationService);
+    service = TestBed.inject(AuthService);
     httpTestingController = TestBed.inject(HttpTestingController);
   });
 
