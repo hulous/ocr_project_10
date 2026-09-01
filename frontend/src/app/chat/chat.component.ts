@@ -54,9 +54,8 @@ export class ChatComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe((messages) => {
         this.messages = messages.map((message) => this.toChatMessage(message));
+        this.chatService.connect(this.conversationId);
       });
-
-    this.chatService.connect(this.conversationId);
   }
 
   sendMessage() {
