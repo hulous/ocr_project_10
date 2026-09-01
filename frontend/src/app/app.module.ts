@@ -1,10 +1,11 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CanActivateFn, Router, RouterModule, Routes } from '@angular/router';
 import { AppComponent } from './app.component';
+import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 import { AuthService } from './core/services/auth';
 import { LoginComponent } from './pages/login/login';
 import { RegisterComponent } from './pages/register/register';
