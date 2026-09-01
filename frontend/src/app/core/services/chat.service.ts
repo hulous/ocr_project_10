@@ -3,7 +3,7 @@ import { HttpClient } from "@angular/common/http";
 import { Subject, Subscription } from "rxjs";
 import { RxStomp } from "@stomp/rx-stomp";
 import SockJS from "sockjs-client";
-import { AuthService } from "../core/services/auth";
+import { AuthService } from "./auth";
 
 export interface MessageDto {
   id: string;

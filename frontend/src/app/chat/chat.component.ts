@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { Subject, takeUntil } from "rxjs";
-import { ChatService, MessageDto } from "./chat.service";
+import { ChatService, MessageDto } from "../core/services/chat.service";
 
 interface ChatMessage {
   author: string;
