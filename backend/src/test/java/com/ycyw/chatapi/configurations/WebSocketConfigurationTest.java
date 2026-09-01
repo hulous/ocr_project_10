@@ -28,9 +28,12 @@ class WebSocketConfigurationTest {
   @Mock
   private MessageBrokerRegistry messageBrokerRegistry;
 
+  @Mock
+  private StompAuthChannelInterceptor stompAuthChannelInterceptor;
+
   @Test
   void registerStompEndpointsUsesConfiguredFrontendOrigin() {
-    WebSocketConfiguration configuration = new WebSocketConfiguration();
+    WebSocketConfiguration configuration = new WebSocketConfiguration(stompAuthChannelInterceptor);
     ReflectionTestUtils.setField(configuration, "frontendOrigin", "http://frontend.local:4250");
     when(registry.addEndpoint("/ws")).thenReturn(registration);
     when(registration.setAllowedOrigins("http://frontend.local:4250")).thenReturn(registration);
@@ -45,7 +48,7 @@ class WebSocketConfigurationTest {
 
   @Test
   void configureMessageBrokerRegistersTopicAndAppDestinationPrefixes() {
-    WebSocketConfiguration configuration = new WebSocketConfiguration();
+    WebSocketConfiguration configuration = new WebSocketConfiguration(stompAuthChannelInterceptor);
 
     configuration.configureMessageBroker(messageBrokerRegistry);
 
