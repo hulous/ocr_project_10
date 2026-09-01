@@ -55,54 +55,22 @@ pour le détail et la justification des choix) :
   JPA, Liquibase, MapStruct
 - **Frontend** : Angular
 - **Base de données** : PostgreSQL
-- **Conteneurisation** : Docker (mise en place prévue en milestone
-  « Environnement de développement », cf. [gestion de projet](#-gestion-de-projet))
+- **Conteneurisation** : Docker Compose pour l'environnement local, avec
+  PostgreSQL, le backend, le frontend et un profil Playwright E2E
 
 ## 🚀 Démarrer sur le projet
 
-Le backend Spring Boot et le frontend Angular sont en place. La stack peut être démarrée depuis la racine du dépôt avec Docker Compose.
+Le chemin recommandé est Docker Compose depuis la racine du dépôt. Le fichier
+`.env` est requis par PostgreSQL et le backend.
 
-1. Vérifiez les variables d'environnement dans `.env`, notamment `MAIN_APP_PORT` et `FRONTEND_ORIGIN`.
-2. Lancez la stack :
-
-```bash
-docker compose up --build
-```
-
-3. Ouvrez :
-   - `http://localhost:4250` pour l'interface Angular
-   - `http://localhost:8050` pour l'API backend
-
-### Démarrage alternatif
-
-#### Backend
-
-Depuis le dossier `backend` :
+1. Créez le fichier d'environnement à partir de l'exemple :
 
 ```bash
-mvn spring-boot:run
+cp backend/.env.sample.properties .env
 ```
 
-> Si `./mvnw` ne fonctionne pas, utilisez un Maven système installé localement.
-
-#### Frontend
-
-Depuis le dossier `frontend` :
-
-```bash
-npm install
-npm start
-```
-
-## Ports et endpoints
-
-- Backend API : `http://localhost:8050`
-- Frontend Angular : `http://localhost:4250`
-- Swagger/OpenAPI UI : `http://localhost:8050/swagger-ui/index.html`
-
-## Lancer la stack localement
-
-Le projet peut désormais être démarré avec Docker Compose depuis la racine du dépôt :
+2. Remplacez au minimum `JWT_SECRET_TOKEN` par une valeur aléatoire forte,
+  puis lancez la stack :
 
 ```bash
 docker compose up --build
@@ -113,6 +81,47 @@ Puis ouvrir :
 - `http://localhost:4250` pour l'interface Angular
 - `http://localhost:8050` pour l'API backend
 - `postgres://ycyw:ycyw@localhost:5532/ycyw_chat_app` pour la base PostgreSQL
+
+Swagger/OpenAPI est disponible à
+`http://localhost:8050/swagger-ui/index.html`.
+
+### Commandes Make
+
+Depuis la racine, `make help` affiche les commandes disponibles. Les plus
+utiles sont :
+
+| Commande | Rôle |
+|---|---|
+| `make run` | Construire et démarrer la stack |
+| `make upd` | Démarrer la stack en arrière-plan |
+| `make ps` | Afficher l'état des services |
+| `make logs` | Suivre les journaux |
+| `make test` | Exécuter les tests backend et frontend dans Docker |
+| `make test-e2e` | Construire la stack et exécuter les tests Playwright |
+| `make lint-back` / `make lint-front` | Vérifier le formatage et le lint |
+| `make down` | Arrêter les services |
+
+### Exécution directe
+
+L'exécution hors Docker reste possible avec Java 21+, Maven 3.8+, Node.js et
+npm installés localement : `mvn spring-boot:run` dans `backend/` et `npm
+install && npm start` dans `frontend/`. Le frontend écoute alors sur `4200`;
+le proxy de développement relaie `/api` et `/ws` vers le backend.
+
+## Ports, routes et protocole
+
+- Frontend Angular via Compose : `http://localhost:4250`
+- Backend API via Compose : `http://localhost:8050`
+- PostgreSQL via Compose : `localhost:5532`
+- Authentification : `POST /api/auth/register`, `POST /api/auth/login`,
+  `GET /api/auth/me`
+- Historique : `GET /api/conversations/{conversationId}/messages`
+- WebSocket SockJS/STOMP : endpoint `/ws`, publication `/app/chat.send`,
+  abonnement `/topic/conversations/{conversationId}`
+
+Les routes API protégées et la connexion STOMP nécessitent un JWT. Le client
+envoie le jeton dans l'en-tête `Authorization` de la requête REST et dans les
+headers STOMP de connexion.
 
 ## 🗓️ Gestion de projet
 
