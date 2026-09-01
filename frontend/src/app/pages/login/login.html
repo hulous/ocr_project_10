@@ -1,0 +1,47 @@
+<section class="login-page" aria-labelledby="login-title">
+  <div class="login-intro">
+    <p class="eyebrow">Your Car Your Way</p>
+    <h2 id="login-title">Retrouvez votre espace client.</h2>
+    <p>Connectez-vous pour accéder au tchat avec notre équipe support.</p>
+  </div>
+
+  <form class="login-form" (ngSubmit)="submit()" #loginForm="ngForm" novalidate>
+    <div class="field-group">
+      <label for="email">Adresse email</label>
+      <input
+        id="email"
+        name="email"
+        type="email"
+        autocomplete="email"
+        [(ngModel)]="email"
+        required
+        email
+        #emailField="ngModel"
+        [attr.aria-invalid]="emailField.invalid && emailField.touched"
+      />
+      <small *ngIf="emailField.invalid && emailField.touched">Saisissez une adresse email valide.</small>
+    </div>
+
+    <div class="field-group">
+      <label for="password">Mot de passe</label>
+      <input
+        id="password"
+        name="password"
+        type="password"
+        autocomplete="current-password"
+        [(ngModel)]="password"
+        required
+        minlength="1"
+        #passwordField="ngModel"
+        [attr.aria-invalid]="passwordField.invalid && passwordField.touched"
+      />
+    </div>
+
+    <p *ngIf="errorMessage" class="form-error" role="alert">{{ errorMessage }}</p>
+
+    <button type="submit" [disabled]="loginForm.invalid || isSubmitting">
+      {{ isSubmitting ? 'Connexion...' : 'Se connecter' }}
+    </button>
+    <p class="register-link">Pas encore de compte ? <a routerLink="/register">Créer un compte</a></p>
+  </form>
+</section>
