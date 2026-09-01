@@ -15,6 +15,10 @@ spring:
 server:
   port: "${MAIN_APP_PORT}"
 
+frontend:
+  # Allowed origin for browser WebSocket/STOMP clients.
+  origin: "${FRONTEND_ORIGIN}"
+
 security:
   jwt:
     secret-key: "${JWT_SECRET_TOKEN}"

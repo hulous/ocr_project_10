@@ -62,7 +62,7 @@ pour le détail et la justification des choix) :
 
 Le backend Spring Boot et le frontend Angular sont en place. La stack peut être démarrée depuis la racine du dépôt avec Docker Compose.
 
-1. Vérifiez les variables d'environnement dans `.env`.
+1. Vérifiez les variables d'environnement dans `.env`, notamment `MAIN_APP_PORT` et `FRONTEND_ORIGIN`.
 2. Lancez la stack :
 
 ```bash

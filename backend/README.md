@@ -44,11 +44,13 @@ Required keys:
 - POSTGRES_PASSWORD
 - JWT_SECRET_TOKEN
 - MAIN_APP_PORT
+- FRONTEND_ORIGIN
 
 Notes:
 
 - Use a strong random value for JWT_SECRET_TOKEN.
 - MAIN_APP_PORT controls the HTTP port used by Spring Boot.
+- FRONTEND_ORIGIN controls the allowed origin for WebSocket/STOMP connections and should match the frontend URL, for example `http://localhost:4250`.
 
 ## Run the Application
 
