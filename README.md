@@ -20,9 +20,7 @@ fonctionnalité de tchat, afin de :
 - servir de support d'onboarding pour un développeur qui rejoint le
   projet.
 
-**Aucun code applicatif n'est présent à ce stade.** Ce dépôt contient la
-structure du projet, la documentation et la gestion de projet
-(milestones / issues) qui serviront de point de départ au développement.
+Ce dépôt contient aujourd'hui une preuve de concept fonctionnelle avec un backend Spring Boot et un frontend Angular pour la fonctionnalité de tchat.
 
 ## 📚 Documentation
 
@@ -32,7 +30,6 @@ structure du projet, la documentation et la gestion de projet
 | [`docs/Proposition_architecture_YourCarYourWay.odt`](docs/Proposition_architecture_YourCarYourWay.odt) | Audit de l'existant, architecture cible, modèle de données, choix technologiques |
 | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | Résumé technique rapide (lecture 5 minutes) à destination des développeurs |
 | [`docs/POC_CHAT.md`](docs/POC_CHAT.md) | Périmètre précis, scénario et critères de réussite du PoC |
-| [`CONTRIBUTING.md`](CONTRIBUTING.md) | Conventions de contribution (branches, commits, revue de code) |
 
 ## 🗂️ Structure du dépôt
 
@@ -42,9 +39,7 @@ your-car-your-way-poc-chat/
 ├── frontend/           # Application Angular — interface du PoC tchat
 ├── docs/               # Documentation fonctionnelle et technique
 │   └── diagrams/       # Diagrammes UML (composants, déploiement, classes)
-├── scripts/            # Scripts d'outillage (gestion de projet GitHub, etc.)
-├── .github/            # Templates d'issues/PR, workflows CI (à venir)
-├── CONTRIBUTING.md
+├── .github/            # Templates d'issues/PR, workflows CI
 └── README.md
 ```
 
@@ -65,16 +60,45 @@ pour le détail et la justification des choix) :
 
 ## 🚀 Démarrer sur le projet
 
-Le code n'existe pas encore. Les prochaines étapes (suivies via les
-issues GitHub, cf. ci-dessous) consistent à :
+Le backend Spring Boot et le frontend Angular sont en place. La stack peut être démarrée depuis la racine du dépôt avec Docker Compose.
 
-1. mettre en place le squelette Spring Boot dans `backend/` ;
-2. mettre en place le squelette Angular dans `frontend/` ;
-3. configurer `docker-compose` (backend, frontend, PostgreSQL) ;
-4. configurer la CI de base (build + lint).
+1. Vérifiez les variables d'environnement dans `.env`, notamment `MAIN_APP_PORT` et `FRONTEND_ORIGIN`.
+2. Lancez la stack :
 
-Une fois ces étapes réalisées, cette section sera mise à jour avec les
-commandes exactes pour lancer le projet en local.
+```bash
+docker compose up --build
+```
+
+3. Ouvrez :
+   - `http://localhost:4250` pour l'interface Angular
+   - `http://localhost:8050` pour l'API backend
+
+### Démarrage alternatif
+
+#### Backend
+
+Depuis le dossier `backend` :
+
+```bash
+mvn spring-boot:run
+```
+
+> Si `./mvnw` ne fonctionne pas, utilisez un Maven système installé localement.
+
+#### Frontend
+
+Depuis le dossier `frontend` :
+
+```bash
+npm install
+npm start
+```
+
+## Ports et endpoints
+
+- Backend API : `http://localhost:8050`
+- Frontend Angular : `http://localhost:4250`
+- Swagger/OpenAPI UI : `http://localhost:8050/swagger-ui/index.html`
 
 ## Lancer la stack localement
 
@@ -88,7 +112,7 @@ Puis ouvrir :
 
 - `http://localhost:4250` pour l'interface Angular
 - `http://localhost:8050` pour l'API backend
-- `postgres://ycyw:ycyw@localhost:5532/ycyw_poc` pour la base PostgreSQL
+- `postgres://ycyw:ycyw@localhost:5532/ycyw_chat_app` pour la base PostgreSQL
 
 ## 🗓️ Gestion de projet
 
@@ -101,10 +125,7 @@ mission :
 3. 🔧 Mise en place de l'environnement de développement
 4. 🔧 PoC — Fonctionnalité de tchat
 
-Le script [`scripts/setup_project_management.sh`](scripts/setup_project_management.sh)
-crée automatiquement ces milestones, les labels et les issues associées
-via le [GitHub CLI](https://cli.github.com/) (`gh`). Voir l'en-tête du
-script pour le mode d'emploi.
+Les issues et milestones du projet sont suivies directement sur GitHub.
 
 ## 👤 Contact
 

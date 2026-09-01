@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: ycywapi
+  datasource:
+    url: "jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}?sslmode=disable"
+    username: "${POSTGRES_USER}"
+    password: "${POSTGRES_PASSWORD}"
+  jpa:
+    hibernate:
+      ddl-auto: none
+    open-in-view: false
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+
+server:
+  port: "${MAIN_APP_PORT}"
+
+frontend:
+  # Allowed origin for browser WebSocket/STOMP clients.
+  origin: "${FRONTEND_ORIGIN}"
+
+security:
+  jwt:
+    secret-key: "${JWT_SECRET_TOKEN}"
+    expiration-time: 3600000 # 1h in millisecond

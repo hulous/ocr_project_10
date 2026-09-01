@@ -1,37 +1,110 @@
-# Backend — PoC Tchat
+# mySringBootBase
 
-Module backend du PoC, en Java 21 / Spring Boot.
+Spring Boot base project with:
 
-> ⚠️ Ce dossier est actuellement vide de code : il ne contient que la
-> structure attendue. Le code sera ajouté au fil des issues du milestone
-> « PoC — Fonctionnalité de tchat ».
+- Spring Web MVC
+- Spring Security
+- Spring Data JPA
+- Liquibase
+- PostgreSQL
+- H2 in-memory database for tests
+- OpenAPI UI (springdoc)
 
-## Build
+## Prerequisites
 
-Ce module peut être vérifié localement avec Maven :
+- Java 21+
+- Maven 3.8+
+- PostgreSQL running locally or reachable from this app
+
+## Project Structure
+
+- Application entry point: src/main/java/com/ycyw/chatapi/ChatApiApplication.java
+- Main config: src/main/resources/application.yaml
+- Environment values: root `.env` for Docker Compose, or environment variables for direct execution
+- Example environment values: backend/.env.sample.properties
+
+## Environment Configuration
+
+The app reads environment values from environment variables. Docker Compose loads these values from the repository root `.env` file.
+
+1. Copy the sample file to the repo root if needed for local Compose usage:
 
 ```bash
-cd backend
-mvn -q verify
+cp backend/.env.sample.properties .env
 ```
 
-Note : les versions compatibles utilisées pour ce projet sont
-`maven-checkstyle-plugin:3.4.0` et `spotless-maven-plugin:3.10.0`.
+2. Update values in `.env`.
 
-## Contenu attendu (à venir)
+Required keys:
 
-- API REST minimale (authentification réutilisant les principes JWT
-  décrits dans `docs/ARCHITECTURE.md`)
-- Endpoint temps réel (WebSocket / STOMP) pour l'échange de messages du
-  tchat
-- Configuration Liquibase pour le schéma minimal nécessaire au PoC
-  (table de messages)
-- Tests automatisés (unitaires a minima sur la logique métier du tchat)
+- POSTGRES_DB
+- POSTGRES_HOST
+- POSTGRES_PORT
+- POSTGRES_USER
+- POSTGRES_PASSWORD
+- JWT_SECRET_TOKEN
+- MAIN_APP_PORT
+- FRONTEND_ORIGIN
 
-## Conventions
+Notes:
 
-- Organisation du code par fonctionnalité (« package by feature »),
-  conformément à la proposition d'architecture.
-- Un module = un package racine (ex. `chat`), pas de découpage
-  technique global (`controllers`, `services`, `repositories` en
-  vrac à la racine).
+- Use a strong random value for JWT_SECRET_TOKEN.
+- MAIN_APP_PORT controls the HTTP port used by Spring Boot.
+- FRONTEND_ORIGIN controls the allowed origin for WebSocket/STOMP connections and should match the frontend URL, for example `http://localhost:4250`.
+
+## Run the Application
+
+Preferred mode (from repository root):
+
+```bash
+docker compose up --build
+```
+
+Direct backend run (from `backend/`) :
+
+```bash
+mvn spring-boot:run
+```
+
+Build a jar:
+
+```bash
+mvn clean package
+```
+
+Run tests:
+
+```bash
+mvn test
+```
+
+## Testing
+
+- Unit and integration tests are configured to use an H2 in-memory database.
+- The Maven `pom.xml` now includes `com.h2database:h2` as a test dependency.
+- Test datasource settings are defined in `src/test/resources/application.yaml`.
+- Liquibase runs during tests using `classpath:db/changelog/db.changelog-master.yaml`.
+
+## API Docs
+
+Once the app is running, OpenAPI UI is available at:
+
+- http://localhost:${MAIN_APP_PORT}/swagger-ui/index.html
+
+## Ports et endpoints
+
+- Backend API : http://localhost:8050
+- Swagger/OpenAPI UI : http://localhost:8050/swagger-ui/index.html
+
+## Database Migrations
+
+Liquibase dependency is included. Add changelogs under:
+
+- src/main/resources/db/changelog
+
+## Important Note About Maven Wrapper
+
+This repository currently has mvnw/mvnw.cmd scripts but is missing wrapper metadata in .mvn/wrapper.
+Because of that, ./mvnw does not work at the moment.
+
+Use system Maven commands (mvn ...) until wrapper files are restored.

@@ -43,6 +43,4 @@ validation technique, pas de livraison d'une fonctionnalité complète.
 
 ## Suivi
 
-Le détail des tâches est suivi via les issues du milestone
-« PoC — Fonctionnalité de tchat » (voir
-[`scripts/setup_project_management.sh`](../scripts/setup_project_management.sh)).
+Le détail des tâches est suivi via les issues du milestone « PoC — Fonctionnalité de tchat » sur GitHub.
