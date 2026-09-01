@@ -13,6 +13,5 @@ import { Component } from '@angular/core';
       </main>
     </div>
   `,
-  styles: [],
 })
 export class AppComponent {}
