@@ -35,7 +35,7 @@ test-back: ## Run backend unit tests in Docker
 	$(DOCKER) run --rm -v $(ROOT)/backend:/workspace -w /workspace $(BACK_TEST_IMAGE) mvn -q test
 
 test-front: ## Run frontend unit tests in Docker
-	$(DOCKER) run --rm -v $(ROOT)/frontend:/workspace -w /workspace $(FRONT_TEST_IMAGE) bash -lc "apt-get update && apt-get install -y chromium && npm install && npm test -- --watch=false --browsers=ChromeHeadlessNoSandbox"
+	$(DOCKER) run --rm -v $(ROOT)/frontend:/workspace -w /workspace $(FRONT_TEST_IMAGE) bash -lc "apt-get update && apt-get install -y chromium && npm install && npm test -- --watch=false --browsers=ChromeHeadlessNoSandbox --code-coverage"
 
 lint-back: ## Run backend lint and formatting checks in Docker
 	$(DOCKER) run --rm -v $(ROOT)/backend:/workspace -w /workspace $(BACK_TEST_IMAGE) mvn -q verify
