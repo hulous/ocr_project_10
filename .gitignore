@@ -9,6 +9,7 @@ build/
 node_modules/
 dist/
 .angular/
+coverage/
 
 # --- IDE ---
 .idea/
