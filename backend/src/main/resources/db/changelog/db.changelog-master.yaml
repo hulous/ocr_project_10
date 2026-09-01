@@ -33,7 +33,9 @@ databaseChangeLog:
                   type: timestamp
               - column:
                   name: updated_at
-                  type: timestamp  - changeSet:
+                  type: timestamp
+
+  - changeSet:
       id: 2
       author: liquibase
       changes:
