@@ -9,8 +9,15 @@ import { LoginComponent } from './pages/login/login';
 import { RegisterComponent } from './pages/register/register';
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent, RegisterComponent],
-  imports: [BrowserModule, HttpClientModule, FormsModule, AppRoutingModule],
+  imports: [
+    BrowserModule,
+    HttpClientModule,
+    FormsModule,
+    AppRoutingModule,
+    AppComponent,
+    LoginComponent,
+    RegisterComponent,
+  ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,

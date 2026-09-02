@@ -1,11 +1,15 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 import { ChatService, MessageDto } from '../core/services/chat.service';
 import { ChatMessage } from '../core/models/chat-message.interface';
 
 @Component({
   selector: 'app-chat',
+  standalone: true,
+  imports: [CommonModule, FormsModule],
   templateUrl: './chat.component.html',
 })
 export class ChatComponent implements OnInit, OnDestroy {
