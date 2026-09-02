@@ -13,6 +13,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher;
 
 @Configuration
 public class SecurityConfiguration {
@@ -40,23 +41,33 @@ public class SecurityConfiguration {
   SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     AuthenticationEntryPoint unauthorizedEntryPoint = this::writeUnauthorized;
 
-    http.csrf(AbstractHttpConfigurer::disable)
-        .authorizeHttpRequests(
-            authorize ->
-                authorize.requestMatchers(PUBLIC_URLS).permitAll().anyRequest().authenticated())
-        .exceptionHandling(
-            exceptionHandling ->
-                exceptionHandling
-                    .authenticationEntryPoint(unauthorizedEntryPoint)
-                    .accessDeniedHandler(
-                        (request, response, exception) ->
-                            writeUnauthorized(request, response, null)))
-        .sessionManagement(
-            session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-        .authenticationProvider(authenticationProvider)
-        .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-        .formLogin(AbstractHttpConfigurer::disable)
-        .httpBasic(AbstractHttpConfigurer::disable);
+    http.
+      csrf(AbstractHttpConfigurer::disable).
+      authorizeHttpRequests(
+        authorize ->
+          authorize.
+            requestMatchers(PUBLIC_URLS).
+            permitAll().
+            requestMatchers(PathPatternRequestMatcher.withDefaults().matcher("/ws/**")).
+            permitAll().
+            anyRequest().
+            authenticated()
+      ).
+      exceptionHandling(
+        exceptionHandling ->
+          exceptionHandling.
+            authenticationEntryPoint(unauthorizedEntryPoint).
+            accessDeniedHandler(
+              (request, response, exception) -> writeUnauthorized(request, response, null)
+            )
+      ).
+      sessionManagement(
+        session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+      ).
+      authenticationProvider(authenticationProvider).
+      addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class).
+      formLogin(AbstractHttpConfigurer::disable).
+      httpBasic(AbstractHttpConfigurer::disable);
 
     return http.build();
   }

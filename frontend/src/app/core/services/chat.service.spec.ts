@@ -16,6 +16,15 @@ describe('ChatService', () => {
     content: 'Hello',
     sentAt: '2026-01-01T12:00:00.000Z',
   };
+  const frame: IMessage = {
+    ack: jasmine.createSpy('ack'),
+    nack: jasmine.createSpy('nack'),
+    command: 'MESSAGE',
+    headers: {},
+    body: JSON.stringify(message),
+    isBinaryBody: false,
+    binaryBody: new Uint8Array(),
+  };
 
   beforeEach(() => {
     authService = jasmine.createSpyObj('AuthService', ['getToken']);
@@ -27,16 +36,15 @@ describe('ChatService', () => {
       'publish',
       'deactivate',
     ]);
-    const frame: IMessage = {
-      ack: jasmine.createSpy('ack'),
-      nack: jasmine.createSpy('nack'),
-      command: 'MESSAGE',
-      headers: {},
-      body: JSON.stringify(message),
-      isBinaryBody: false,
-      binaryBody: new Uint8Array(),
-    };
     client.watch.and.returnValue(of(frame));
+    Object.defineProperty(client, 'stompClient', {
+      value: {
+        subscribe: jasmine
+          .createSpy('subscribe')
+          .and.returnValue({ unsubscribe() {} }),
+      },
+    });
+    Object.defineProperty(client, 'connected$', { value: of({}) });
     service = new ChatService(authService, http);
     Object.defineProperty(service, 'client', { value: client });
   });
@@ -65,7 +73,12 @@ describe('ChatService', () => {
       }),
     );
     expect(client.activate).toHaveBeenCalled();
-    expect(client.watch).toHaveBeenCalledWith('/topic/conversations/conversation-1');
+    const subscribeSpy = client.stompClient.subscribe as jasmine.Spy;
+    expect(subscribeSpy).toHaveBeenCalledWith(
+      '/topic/conversations/conversation-1',
+      jasmine.any(Function),
+    );
+    subscribeSpy.calls.mostRecent().args[1](frame);
     expect(received).toEqual(message);
   });
 

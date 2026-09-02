@@ -24,6 +24,8 @@ services:
       postgres:
         condition: service_healthy
     env_file: .env
+    environment:
+      FRONTEND_ORIGIN: '${FRONTEND_ORIGIN}'
     ports:
       - '8050:8050'
 

@@ -67,7 +67,7 @@ test('delivers a message from one user to another in real time', async ({
     }
 
     const message = `Message temps réel ${runId}`;
-    await senderPage.getByLabel('Message').fill(message);
+    await senderPage.getByRole('textbox', { name: 'Message' }).fill(message);
     await senderPage.getByRole('button', { name: 'Envoyer' }).click();
 
     await expect(receiverPage.getByRole('log', { name: 'Messages du tchat' })).toContainText(

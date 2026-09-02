@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Subject, Subscription } from 'rxjs';
+import { Subject, Subscription, take } from 'rxjs';
 import { RxStomp } from '@stomp/rx-stomp';
 import SockJS from 'sockjs-client';
 import { AuthService } from './auth';
@@ -10,7 +10,7 @@ export interface MessageDto {
   conversationId: string;
   senderEmail: string;
   content: string;
-  sentAt: string; // ISO-8601, sérialisé par Jackson côté backend
+  sentAt: string;
 }
 
 interface IncomingMessagePayload {
@@ -49,16 +49,20 @@ export class ChatService {
       reconnectDelay: 5000,
     });
 
+    this.client.connected$.pipe(take(1)).subscribe(() => {
+      const stompSubscription = this.client.stompClient.subscribe(
+        `/topic/conversations/${conversationId}`,
+        (frame) => {
+          const message: MessageDto = JSON.parse(frame.body);
+          this.messagesSubject.next(message);
+        },
+      );
+      this.messageSubscription = new Subscription(() => stompSubscription.unsubscribe());
+    });
+
     this.client.activate();
     this.connected = true;
     this.connectedConversationId = conversationId;
-
-    this.messageSubscription = this.client
-      .watch(`/topic/conversations/${conversationId}`)
-      .subscribe((frame) => {
-        const message: MessageDto = JSON.parse(frame.body);
-        this.messagesSubject.next(message);
-      });
   }
 
   send(conversationId: string, content: string): void {
