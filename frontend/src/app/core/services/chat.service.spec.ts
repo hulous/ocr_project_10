@@ -39,9 +39,7 @@ describe('ChatService', () => {
     client.watch.and.returnValue(of(frame));
     Object.defineProperty(client, 'stompClient', {
       value: {
-        subscribe: jasmine
-          .createSpy('subscribe')
-          .and.returnValue({ unsubscribe() {} }),
+        subscribe: jasmine.createSpy('subscribe').and.returnValue({ unsubscribe() {} }),
       },
     });
     Object.defineProperty(client, 'connected$', { value: of({}) });
