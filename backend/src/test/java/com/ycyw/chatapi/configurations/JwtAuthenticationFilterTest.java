@@ -1,13 +1,20 @@
 package com.ycyw.chatapi.configurations;
 
-import com.ycyw.chatapi.services.JwtService;
-import com.ycyw.chatapi.entities.User;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
+import com.ycyw.chatapi.entities.User;
+import com.ycyw.chatapi.services.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
+import java.io.IOException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,36 +25,20 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
-import java.io.IOException;
-
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 @ExtendWith(MockitoExtension.class)
 class JwtAuthenticationFilterTest {
 
-  @Mock
-  private JwtService jwtService;
+  @Mock private JwtService jwtService;
 
-  @Mock
-  private UserDetailsService userDetailsService;
+  @Mock private UserDetailsService userDetailsService;
 
-  @Mock
-  private HandlerExceptionResolver handlerExceptionResolver;
+  @Mock private HandlerExceptionResolver handlerExceptionResolver;
 
-  @Mock
-  private HttpServletRequest request;
+  @Mock private HttpServletRequest request;
 
-  @Mock
-  private HttpServletResponse response;
+  @Mock private HttpServletResponse response;
 
-  @Mock
-  private FilterChain filterChain;
+  @Mock private FilterChain filterChain;
 
   @AfterEach
   void clearSecurityContext() {
@@ -56,7 +47,9 @@ class JwtAuthenticationFilterTest {
 
   @Test
   void shouldNotFilterReturnsTrueForPublicPaths() {
-    TestableJwtAuthenticationFilter filter = new TestableJwtAuthenticationFilter(jwtService, userDetailsService, handlerExceptionResolver);
+    TestableJwtAuthenticationFilter filter =
+        new TestableJwtAuthenticationFilter(
+            jwtService, userDetailsService, handlerExceptionResolver);
     when(request.getServletPath()).thenReturn("/api/auth/login");
 
     assertTrue(filter.callShouldNotFilter(request));
@@ -64,7 +57,9 @@ class JwtAuthenticationFilterTest {
 
   @Test
   void shouldNotFilterReturnsFalseForPrivatePath() {
-    TestableJwtAuthenticationFilter filter = new TestableJwtAuthenticationFilter(jwtService, userDetailsService, handlerExceptionResolver);
+    TestableJwtAuthenticationFilter filter =
+        new TestableJwtAuthenticationFilter(
+            jwtService, userDetailsService, handlerExceptionResolver);
     when(request.getServletPath()).thenReturn("/api/rentals");
 
     assertFalse(filter.callShouldNotFilter(request));
@@ -72,7 +67,9 @@ class JwtAuthenticationFilterTest {
 
   @Test
   void doFilterInternalDelegatesWhenHeaderMissing() throws Exception {
-    TestableJwtAuthenticationFilter filter = new TestableJwtAuthenticationFilter(jwtService, userDetailsService, handlerExceptionResolver);
+    TestableJwtAuthenticationFilter filter =
+        new TestableJwtAuthenticationFilter(
+            jwtService, userDetailsService, handlerExceptionResolver);
     when(request.getHeader("Authorization")).thenReturn(null);
 
     filter.callDoFilterInternal(request, response, filterChain);
@@ -82,7 +79,9 @@ class JwtAuthenticationFilterTest {
 
   @Test
   void doFilterInternalAuthenticatesWhenTokenIsValid() throws Exception {
-    TestableJwtAuthenticationFilter filter = new TestableJwtAuthenticationFilter(jwtService, userDetailsService, handlerExceptionResolver);
+    TestableJwtAuthenticationFilter filter =
+        new TestableJwtAuthenticationFilter(
+            jwtService, userDetailsService, handlerExceptionResolver);
     User user = new User().setEmail("john@example.com");
 
     when(request.getHeader("Authorization")).thenReturn("Bearer jwt-token");
@@ -98,11 +97,12 @@ class JwtAuthenticationFilterTest {
 
   @Test
   void doFilterInternalSkipsUserLoadWhenAlreadyAuthenticated() throws Exception {
-    TestableJwtAuthenticationFilter filter = new TestableJwtAuthenticationFilter(jwtService, userDetailsService, handlerExceptionResolver);
+    TestableJwtAuthenticationFilter filter =
+        new TestableJwtAuthenticationFilter(
+            jwtService, userDetailsService, handlerExceptionResolver);
 
-    SecurityContextHolder.getContext().setAuthentication(
-      new UsernamePasswordAuthenticationToken("existing", null)
-    );
+    SecurityContextHolder.getContext()
+        .setAuthentication(new UsernamePasswordAuthenticationToken("existing", null));
 
     when(request.getHeader("Authorization")).thenReturn("Bearer jwt-token");
     when(jwtService.extractUsername("jwt-token")).thenReturn("john@example.com");
@@ -115,7 +115,9 @@ class JwtAuthenticationFilterTest {
 
   @Test
   void doFilterInternalUsesExceptionResolverOnFailure() throws Exception {
-    TestableJwtAuthenticationFilter filter = new TestableJwtAuthenticationFilter(jwtService, userDetailsService, handlerExceptionResolver);
+    TestableJwtAuthenticationFilter filter =
+        new TestableJwtAuthenticationFilter(
+            jwtService, userDetailsService, handlerExceptionResolver);
 
     when(request.getHeader("Authorization")).thenReturn("Bearer jwt-token");
     when(jwtService.extractUsername("jwt-token")).thenThrow(new RuntimeException("boom"));
@@ -126,7 +128,10 @@ class JwtAuthenticationFilterTest {
   }
 
   private static class TestableJwtAuthenticationFilter extends JwtAuthenticationFilter {
-    TestableJwtAuthenticationFilter(JwtService jwtService, UserDetailsService userDetailsService, HandlerExceptionResolver handlerExceptionResolver) {
+    TestableJwtAuthenticationFilter(
+        JwtService jwtService,
+        UserDetailsService userDetailsService,
+        HandlerExceptionResolver handlerExceptionResolver) {
       super(jwtService, userDetailsService, handlerExceptionResolver);
     }
 
@@ -134,8 +139,9 @@ class JwtAuthenticationFilterTest {
       return super.shouldNotFilter(request);
     }
 
-    void callDoFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
-      throws ServletException, IOException {
+    void callDoFilterInternal(
+        HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+        throws ServletException, IOException {
       super.doFilterInternal(request, response, chain);
     }
   }

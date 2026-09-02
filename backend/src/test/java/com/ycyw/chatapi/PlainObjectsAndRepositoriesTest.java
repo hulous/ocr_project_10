@@ -1,5 +1,10 @@
 package com.ycyw.chatapi;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import com.ycyw.chatapi.dtos.LoginUserDto;
 import com.ycyw.chatapi.dtos.RegisterUserDto;
 import com.ycyw.chatapi.entities.User;
@@ -7,16 +12,9 @@ import com.ycyw.chatapi.repositories.UserRepository;
 import com.ycyw.chatapi.responses.ApiMessageResponse;
 import com.ycyw.chatapi.responses.LoginResponse;
 import com.ycyw.chatapi.responses.UserResponse;
-
+import java.util.Date;
 import org.junit.jupiter.api.Test;
 import org.springframework.stereotype.Repository;
-
-import java.util.Date;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class PlainObjectsAndRepositoriesTest {
 
@@ -44,13 +42,14 @@ class PlainObjectsAndRepositoriesTest {
     Date createdAt = new Date();
     Date updatedAt = new Date();
 
-    User user = new User()
-      .setId(1)
-      .setEmail("owner@example.com")
-      .setPassword("pwd")
-      .setName("Owner")
-      .setCreatedAt(createdAt)
-      .setUpdatedAt(updatedAt);
+    User user =
+        new User()
+            .setId(1)
+            .setEmail("owner@example.com")
+            .setPassword("pwd")
+            .setName("Owner")
+            .setCreatedAt(createdAt)
+            .setUpdatedAt(updatedAt);
 
     assertEquals(Integer.valueOf(1), user.getId());
     assertEquals("owner@example.com", user.getUsername());

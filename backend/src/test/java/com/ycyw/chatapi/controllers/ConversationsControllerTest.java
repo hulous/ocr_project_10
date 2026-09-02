@@ -1,30 +1,25 @@
 package com.ycyw.chatapi.controllers;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import com.ycyw.chatapi.dtos.MessageDto;
 import com.ycyw.chatapi.services.ChatService;
-
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.when;
-
 @ExtendWith(MockitoExtension.class)
 class ConversationsControllerTest {
 
-  @Mock
-  private ChatService chatService;
+  @Mock private ChatService chatService;
 
-  @InjectMocks
-  private ConversationsController controller;
+  @InjectMocks private ConversationsController controller;
 
   @Test
   void getHistoryReturnsMappedMessagesInOrder() {

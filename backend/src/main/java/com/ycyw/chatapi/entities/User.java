@@ -1,22 +1,18 @@
 package com.ycyw.chatapi.entities;
 
 import jakarta.persistence.*;
-
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
-
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
 
 @Table(name = "users")
 @Entity

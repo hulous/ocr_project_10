@@ -16,7 +16,8 @@ class IncomingMessageDtoTest {
     var violations = validator.validate(new IncomingMessageDto("demo", " "));
 
     assertEquals(1, violations.size());
-    assertTrue(violations.stream().anyMatch(violation ->
-        violation.getMessage().equals("Message content is required")));
+    assertTrue(
+        violations.stream()
+            .anyMatch(violation -> violation.getMessage().equals("Message content is required")));
   }
 }

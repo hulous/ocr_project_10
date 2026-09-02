@@ -1,6 +1,7 @@
 package com.ycyw.chatapi.configurations;
 
 import com.ycyw.chatapi.services.JwtService;
+import java.util.List;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.simp.stomp.StompCommand;
@@ -13,8 +14,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-
-import java.util.List;
 
 @Component
 public class StompAuthChannelInterceptor implements ChannelInterceptor {
@@ -32,7 +31,8 @@ public class StompAuthChannelInterceptor implements ChannelInterceptor {
 
   @Override
   public Message<?> preSend(Message<?> message, MessageChannel channel) {
-    StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
+    StompHeaderAccessor accessor =
+        MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
     if (accessor == null || !accessor.isMutable()) {
       accessor = StompHeaderAccessor.wrap(message);
     }
@@ -56,11 +56,8 @@ public class StompAuthChannelInterceptor implements ChannelInterceptor {
         throw new AuthenticationCredentialsNotFoundException("Token invalide ou expiré");
       }
 
-      UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-        userDetails,
-        null,
-        userDetails.getAuthorities()
-      );
+      UsernamePasswordAuthenticationToken authentication =
+          new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
       accessor.setUser(authentication);
     }

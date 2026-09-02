@@ -2,16 +2,15 @@ package com.ycyw.chatapi.services;
 
 import com.ycyw.chatapi.entities.User;
 import com.ycyw.chatapi.exceptions.ApiException;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 /**
- * Provides access to the currently authenticated user for services that need it.
- * This centralizes the retrieval of the current user from the security context,
- * making it easier to test and maintain services that need user information.
+ * Provides access to the currently authenticated user for services that need it. This centralizes
+ * the retrieval of the current user from the security context, making it easier to test and
+ * maintain services that need user information.
  */
 @Component
 public class CurrentUserService {

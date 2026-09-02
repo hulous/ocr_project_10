@@ -2,7 +2,6 @@ package com.ycyw.chatapi.mappers;
 
 import com.ycyw.chatapi.entities.User;
 import com.ycyw.chatapi.responses.UserResponse;
-
 import org.springframework.stereotype.Component;
 
 @Component
@@ -14,10 +13,10 @@ public class UserMapper {
     }
 
     return new UserResponse()
-      .setId(user.getId())
-      .setName(user.getName())
-      .setEmail(user.getEmail())
-      .setCreatedAt(user.getCreatedAt())
-      .setUpdatedAt(user.getUpdatedAt());
+        .setId(user.getId())
+        .setName(user.getName())
+        .setEmail(user.getEmail())
+        .setCreatedAt(user.getCreatedAt())
+        .setUpdatedAt(user.getUpdatedAt());
   }
 }
