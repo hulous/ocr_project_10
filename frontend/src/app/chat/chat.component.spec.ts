@@ -23,7 +23,9 @@ describe('ChatComponent', () => {
       'send',
       'disconnect',
     ]);
-    chatService.messages$ = messagesSubject.asObservable();
+    Object.defineProperty(chatService, 'messages$', {
+      value: messagesSubject.asObservable(),
+    });
     chatService.loadHistory.and.returnValue(of([historyMessage]));
     const route = {
       snapshot: { paramMap: { get: () => 'conversation-1' } },

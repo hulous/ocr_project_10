@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { of } from 'rxjs';
-import { RxStomp } from '@stomp/rx-stomp';
+import { IMessage, RxStomp } from '@stomp/rx-stomp';
 import { AuthService } from './auth';
 import { ChatService, MessageDto } from './chat.service';
 
@@ -27,7 +27,16 @@ describe('ChatService', () => {
       'publish',
       'deactivate',
     ]);
-    client.watch.and.returnValue(of({ body: JSON.stringify(message) }));
+    const frame: IMessage = {
+      ack: jasmine.createSpy('ack'),
+      nack: jasmine.createSpy('nack'),
+      command: 'MESSAGE',
+      headers: {},
+      body: JSON.stringify(message),
+      isBinaryBody: false,
+      binaryBody: new Uint8Array(),
+    };
+    client.watch.and.returnValue(of(frame));
     service = new ChatService(authService, http);
     Object.defineProperty(service, 'client', { value: client });
   });
