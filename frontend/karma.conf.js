@@ -1,6 +1,11 @@
 const { Config } = require('karma');
+const fs = require('fs');
 
-process.env.CHROME_BIN = process.env.CHROME_BIN || '/usr/bin/chromium';
+process.env.CHROME_BIN =
+  process.env.CHROME_BIN ||
+  (fs.existsSync('/usr/bin/chromium')
+    ? '/usr/bin/chromium'
+    : '/usr/bin/google-chrome-stable');
 
 module.exports = function (config) {
   config.set({
