@@ -51,7 +51,7 @@ class ChatServiceTest {
             .setSentAt(Instant.parse("2025-01-01T12:00:00Z"));
     MessageDto expectedDto =
         new MessageDto(
-            savedMessage.getId(), "demo", userEmail, "hello world", savedMessage.getSentAt());
+          savedMessage.getId(), "demo", userEmail, "John", "hello world", savedMessage.getSentAt());
 
     when(userRepository.findByEmail(userEmail)).thenReturn(Optional.of(sender));
     when(messageRepository.save(any(Message.class))).thenReturn(savedMessage);
@@ -97,10 +97,10 @@ class ChatServiceTest {
             .setSentAt(Instant.parse("2025-01-01T11:00:00Z"));
     MessageDto firstDto =
         new MessageDto(
-            first.getId(), conversationId, sender.getEmail(), "first", first.getSentAt());
+          first.getId(), conversationId, sender.getEmail(), sender.getName(), "first", first.getSentAt());
     MessageDto secondDto =
         new MessageDto(
-            second.getId(), conversationId, sender.getEmail(), "second", second.getSentAt());
+          second.getId(), conversationId, sender.getEmail(), sender.getName(), "second", second.getSentAt());
 
     when(messageRepository.findByConversationIdOrderBySentAtAsc(conversationId))
         .thenReturn(List.of(first, second));

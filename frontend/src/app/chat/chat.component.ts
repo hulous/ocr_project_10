@@ -55,7 +55,7 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   private toChatMessage(message: MessageDto): ChatMessage {
     return {
-      author: message.senderEmail,
+      author: message.senderName || message.senderEmail,
       text: message.content,
       timestamp: new Date(message.sentAt).toLocaleTimeString('fr-FR'),
       datetime: message.sentAt,
