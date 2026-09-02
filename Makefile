@@ -46,7 +46,7 @@ lint-back: ## Run backend lint and formatting checks in Docker
 	$(DOCKER) run --rm -v $(ROOT)/backend:/workspace -w /workspace $(BACK_TEST_IMAGE) mvn -q verify
 
 lint-front: ## Run frontend lint and formatting checks in Docker
-	$(DOCKER) run --rm -v $(ROOT)/frontend:/workspace -w /workspace $(FRONT_TEST_IMAGE) bash -lc "npm install && npm run lint && npm run format:check"
+	$(DOCKER) run --rm -v $(ROOT):/workspace -w /workspace/frontend $(FRONT_TEST_IMAGE) bash -lc "npm install && npm run lint && npm run format:check"
 
 test: ## Run backend and frontend tests in Docker
 	$(MAKE_CMD) test-back
