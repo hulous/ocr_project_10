@@ -35,7 +35,12 @@ test-back: ## Run backend unit tests in Docker
 	$(DOCKER) run --rm -v $(ROOT)/backend:/workspace -w /workspace $(BACK_TEST_IMAGE) mvn -q test
 
 test-front: ## Run frontend unit tests in Docker
-	$(DOCKER) run --rm -v $(ROOT)/frontend:/workspace -w /workspace $(FRONT_TEST_IMAGE) bash -lc "apt-get update && apt-get install -y chromium && npm install && npm test -- --watch=false --browsers=ChromeHeadlessNoSandbox"
+	$(DOCKER) run --rm -v $(ROOT)/frontend:/workspace -w /workspace $(FRONT_TEST_IMAGE) bash -lc "apt-get update && apt-get install -y chromium && npm install && npm test -- --watch=false --browsers=ChromeHeadlessNoSandbox --code-coverage"
+
+test-e2e: ## Run end-to-end tests against Docker Compose services
+	$(COMPOSE) up --build -d postgres backend frontend
+	$(COMPOSE) --profile e2e build e2e
+	$(COMPOSE) --profile e2e run --rm e2e
 
 lint-back: ## Run backend lint and formatting checks in Docker
 	$(DOCKER) run --rm -v $(ROOT)/backend:/workspace -w /workspace $(BACK_TEST_IMAGE) mvn -q verify

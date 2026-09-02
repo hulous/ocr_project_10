@@ -21,6 +21,22 @@ couvrent pas.
 - L'authentification déjà prévue pour l'API REST (JWT) peut être
   réutilisée pour sécuriser l'accès au canal temps réel.
 
+## Scénario disponible
+
+1. Un visiteur qui ouvre `/chat` est redirigé vers `/login`.
+2. Le visiteur crée un compte sur `/register`, puis se connecte.
+3. L'application charge l'historique de la conversation `demo` via
+  `GET /api/conversations/demo/messages`.
+4. Elle ouvre une connexion SockJS/STOMP sur `/ws`, s'abonne à
+  `/topic/conversations/demo`, puis publie les messages vers
+  `/app/chat.send`.
+5. Le backend associe le message à l'utilisateur authentifié et le diffuse
+  aux clients abonnés à la conversation.
+
+L'identifiant de conversation peut aussi être fourni par la route
+`/chat/{conversationId}`. Le proxy Angular relaie `/api` et `/ws` vers le
+backend en environnement de développement.
+
 ## Ce que le PoC ne couvre pas
 
 - L'historisation longue durée des conversations, la recherche dans
@@ -37,9 +53,20 @@ validation technique, pas de livraison d'une fonctionnalité complète.
   restitué en temps réel à un autre client connecté sur la même
   conversation.
 - Le canal est accessible uniquement à un utilisateur authentifié.
-- Le bilan technique (dernière issue du milestone) documente les
-  éventuelles limites rencontrées et les recommandations pour un
-  passage à l'échelle sur le périmètre complet de l'application.
+- Les tests unitaires backend/frontend et le scénario E2E d'authentification
+  et d'ouverture du tchat passent.
+- Le bilan technique documente les éventuelles limites rencontrées et les
+  recommandations pour un passage à l'échelle sur le périmètre complet de
+  l'application.
+
+## Vérification
+
+Depuis la racine du dépôt :
+
+```bash
+make test
+make test-e2e
+```
 
 ## Suivi
 

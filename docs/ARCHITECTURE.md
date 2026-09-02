@@ -52,6 +52,11 @@ Ensuite, ouvrez :
 - `http://localhost:8050` pour le backend
 - `http://localhost:8050/swagger-ui/index.html` pour l'API docs
 
+Les commandes `make run`, `make test`, `make test-e2e` et `make down` sont
+des raccourcis Docker Compose documentés dans le README racine. La stack
+expose PostgreSQL sur le port `5532`, le backend sur `8050` et le frontend
+sur `4250`.
+
 ## Ce que le PoC de ce dépôt valide spécifiquement
 
 Le PoC porte uniquement sur la fonctionnalité de tchat et vise à
@@ -59,3 +64,8 @@ vérifier que l'architecture ci-dessus supporte un flux **temps réel**
 (WebSocket/STOMP côté backend), en complément des échanges REST
 classiques déjà couverts par le reste du cahier des charges. Voir
 [`POC_CHAT.md`](POC_CHAT.md) pour le détail du scénario.
+
+Le backend expose l'endpoint SockJS `/ws`, protège la commande STOMP
+`/app/chat.send` avec le JWT transmis lors de la connexion, puis diffuse les
+messages sur `/topic/conversations/{conversationId}`. L'interface Angular
+utilise le même jeton pour ses appels REST et sa connexion STOMP.

@@ -1,0 +1,37 @@
+<section aria-labelledby="chat-title">
+  <h2 id="chat-title">Tchat</h2>
+
+  <div
+    class="chat-window"
+    role="log"
+    aria-live="polite"
+    aria-label="Messages du tchat"
+  >
+    <ng-container *ngIf="messages.length; else emptyState">
+      <article class="chat-message" *ngFor="let message of messages">
+        <strong>{{ message.author }}</strong>
+        <time [attr.datetime]="message.datetime">{{ message.timestamp }}</time>
+        <p>{{ message.text }}</p>
+      </article>
+    </ng-container>
+
+    <ng-template #emptyState>
+      <p>Aucun message pour l'instant. Envoyez le premier message.</p>
+    </ng-template>
+  </div>
+
+  <form class="chat-form" (ngSubmit)="sendMessage()">
+    <label for="messageInput">Message</label>
+    <textarea
+      id="messageInput"
+      name="message"
+      rows="3"
+      [(ngModel)]="draft"
+      required
+      aria-required="true"
+      placeholder="Tapez votre message ici"
+    ></textarea>
+
+    <button type="submit" [disabled]="!draft.trim()">Envoyer</button>
+  </form>
+</section>

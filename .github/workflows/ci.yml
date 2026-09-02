@@ -9,6 +9,7 @@ on:
     branches:
       - main
       - master
+  workflow_dispatch:
 
 jobs:
   build-backend:
@@ -49,6 +50,11 @@ jobs:
       - name: Install frontend dependencies
         working-directory: frontend
         run: npm install
+      - name: Install Chromium
+        run: sudo apt-get update && sudo apt-get install -y chromium
+      - name: Run frontend tests
+        working-directory: frontend
+        run: npm test -- --watch=false --browsers=ChromeHeadlessNoSandbox --code-coverage
       - name: Run frontend build
         working-directory: frontend
         run: npm run build
@@ -58,3 +64,25 @@ jobs:
       - name: Check formatting
         working-directory: frontend
         run: npm run format:check
+
+  e2e:
+    if: ${{ github.event_name == 'workflow_dispatch' }}
+    needs:
+      - build-backend
+      - build-frontend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Configure test environment
+        run: |
+          printf '%s\n' \
+            'POSTGRES_DB=ycyw_chat_app' \
+            'POSTGRES_HOST=postgres' \
+            'POSTGRES_PORT=5432' \
+            'POSTGRES_USER=ycyw' \
+            'POSTGRES_PASSWORD=ci-password' \
+            'JWT_SECRET_TOKEN=ci-only-test-secret-that-is-long-enough' \
+            'MAIN_APP_PORT=8050' \
+            'FRONTEND_ORIGIN=http://localhost:4250' > .env
+      - name: Run end-to-end tests
+        run: make test-e2e

@@ -1,0 +1,65 @@
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable, tap } from 'rxjs';
+import { LoginCredentials } from '../models/login-request.interface';
+import { LoginResponse } from '../models/login-response.interface';
+import { RegisterRequest } from '../models/register-request.interface';
+import { UserResponse } from '../models/user-response.interface';
+
+interface StoredAuthentication extends LoginResponse {
+  email: string;
+}
+
+@Injectable({ providedIn: 'root' })
+export class AuthService {
+  private readonly storageKey = 'ycyw.authentication';
+  private readonly loginUrl = '/api/auth/login';
+
+  constructor(private readonly http: HttpClient) {}
+
+  login(credentials: LoginCredentials): Observable<LoginResponse> {
+    return this.http.post<LoginResponse>(this.loginUrl, credentials).pipe(
+      tap((response) => {
+        this.storeAuthentication({ ...response, email: credentials.email });
+      }),
+    );
+  }
+
+  register(request: RegisterRequest): Observable<UserResponse> {
+    return this.http.post<UserResponse>('/api/auth/register', request);
+  }
+
+  logout(): void {
+    localStorage.removeItem(this.storageKey);
+  }
+
+  getToken(): string | null {
+    return this.getStoredAuthentication()?.token ?? null;
+  }
+
+  getEmail(): string | null {
+    return this.getStoredAuthentication()?.email ?? null;
+  }
+
+  isAuthenticated(): boolean {
+    return this.getToken() !== null;
+  }
+
+  private storeAuthentication(authentication: StoredAuthentication): void {
+    localStorage.setItem(this.storageKey, JSON.stringify(authentication));
+  }
+
+  private getStoredAuthentication(): StoredAuthentication | null {
+    const storedAuthentication = localStorage.getItem(this.storageKey);
+    if (!storedAuthentication) {
+      return null;
+    }
+
+    try {
+      return JSON.parse(storedAuthentication) as StoredAuthentication;
+    } catch {
+      this.logout();
+      return null;
+    }
+  }
+}
