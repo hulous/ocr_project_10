@@ -1,12 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { of } from 'rxjs';
+import { RxStomp } from '@stomp/rx-stomp';
+import { AuthService } from './auth';
 import { ChatService, MessageDto } from './chat.service';
 
 describe('ChatService', () => {
   let service: ChatService;
-  let authService: any;
+  let authService: jasmine.SpyObj<AuthService>;
   let http: jasmine.SpyObj<HttpClient>;
-  let client: jasmine.SpyObj<any>;
+  let client: jasmine.SpyObj<RxStomp>;
   const message: MessageDto = {
     id: 'message-1',
     conversationId: 'conversation-1',
@@ -18,10 +20,16 @@ describe('ChatService', () => {
   beforeEach(() => {
     authService = jasmine.createSpyObj('AuthService', ['getToken']);
     http = jasmine.createSpyObj('HttpClient', ['get']);
-    client = jasmine.createSpyObj('RxStomp', ['configure', 'activate', 'watch', 'publish', 'deactivate']);
+    client = jasmine.createSpyObj('RxStomp', [
+      'configure',
+      'activate',
+      'watch',
+      'publish',
+      'deactivate',
+    ]);
     client.watch.and.returnValue(of({ body: JSON.stringify(message) }));
     service = new ChatService(authService, http);
-    (service as any).client = client;
+    Object.defineProperty(service, 'client', { value: client });
   });
 
   it('loads conversation history through the API', () => {
@@ -41,10 +49,12 @@ describe('ChatService', () => {
 
     service.connect('conversation-1');
 
-    expect(client.configure).toHaveBeenCalledWith(jasmine.objectContaining({
-      connectHeaders: { Authorization: 'Bearer jwt-token' },
-      reconnectDelay: 5000,
-    }));
+    expect(client.configure).toHaveBeenCalledWith(
+      jasmine.objectContaining({
+        connectHeaders: { Authorization: 'Bearer jwt-token' },
+        reconnectDelay: 5000,
+      }),
+    );
     expect(client.activate).toHaveBeenCalled();
     expect(client.watch).toHaveBeenCalledWith('/topic/conversations/conversation-1');
     expect(received).toEqual(message);
@@ -71,7 +81,10 @@ describe('ChatService', () => {
     expect(client.deactivate).toHaveBeenCalled();
     expect(client.publish).toHaveBeenCalledWith({
       destination: '/app/chat.send',
-      body: JSON.stringify({ conversationId: 'conversation-2', content: 'Hi there' }),
+      body: JSON.stringify({
+        conversationId: 'conversation-2',
+        content: 'Hi there',
+      }),
     });
   });
 

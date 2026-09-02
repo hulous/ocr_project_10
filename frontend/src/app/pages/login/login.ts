@@ -33,9 +33,10 @@ export class LoginComponent {
       },
       error: (error: HttpErrorResponse) => {
         this.isSubmitting = false;
-        this.errorMessage = error.status === 401
-          ? 'Adresse email ou mot de passe incorrect.'
-          : 'La connexion est momentanément indisponible.';
+        this.errorMessage =
+          error.status === 401
+            ? 'Adresse email ou mot de passe incorrect.'
+            : 'La connexion est momentanément indisponible.';
       },
     });
   }

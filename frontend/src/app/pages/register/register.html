@@ -24,7 +24,9 @@
         #emailField="ngModel"
         [attr.aria-invalid]="emailField.invalid && emailField.touched"
       />
-      <small *ngIf="emailField.invalid && emailField.touched">Saisissez une adresse email valide.</small>
+      <small *ngIf="emailField.invalid && emailField.touched"
+        >Saisissez une adresse email valide.</small
+      >
     </div>
 
     <div class="field-group">

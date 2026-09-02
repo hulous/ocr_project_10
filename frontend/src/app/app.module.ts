@@ -15,33 +15,30 @@ const authGuard: CanActivateFn = (_route, state) => {
   const router = inject(Router);
   return authenticationService.isAuthenticated()
     ? true
-    : router.createUrlTree(['/login'], { queryParams: { returnUrl: state.url } });
+    : router.createUrlTree(['/login'], {
+        queryParams: { returnUrl: state.url },
+      });
 };
 
 const routes: Routes = [
   { path: '', redirectTo: 'chat', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-  { path: 'chat', canActivate: [authGuard], loadChildren: () => import('./chat/chat.module').then((m) => m.ChatModule) },
+  {
+    path: 'chat',
+    canActivate: [authGuard],
+    loadChildren: () => import('./chat/chat.module').then((m) => m.ChatModule),
+  },
 ];
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    LoginComponent,
-    RegisterComponent
-  ],
-  imports: [
-    BrowserModule,
-    HttpClientModule,
-    FormsModule,
-    RouterModule.forRoot(routes)
-  ],
+  declarations: [AppComponent, LoginComponent, RegisterComponent],
+  imports: [BrowserModule, HttpClientModule, FormsModule, RouterModule.forRoot(routes)],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
-      multi: true
+      multi: true,
     },
   ],
   bootstrap: [AppComponent],

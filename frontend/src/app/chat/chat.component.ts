@@ -1,7 +1,7 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
-import { Subject, takeUntil } from "rxjs";
-import { ChatService, MessageDto } from "../core/services/chat.service";
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
+import { ChatService, MessageDto } from '../core/services/chat.service';
 
 interface ChatMessage {
   author: string;
@@ -11,14 +11,14 @@ interface ChatMessage {
 }
 
 @Component({
-  selector: "app-chat",
-  templateUrl: "./chat.component.html",
+  selector: 'app-chat',
+  templateUrl: './chat.component.html',
 })
 export class ChatComponent implements OnInit, OnDestroy {
   private readonly destroy$ = new Subject<void>();
-  private readonly defaultConversationId = "demo";
+  private readonly defaultConversationId = 'demo';
   conversationId = this.defaultConversationId;
-  draft = "";
+  draft = '';
   messages: ChatMessage[] = [];
 
   constructor(
@@ -28,15 +28,12 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.conversationId =
-      this.route.snapshot.paramMap.get("conversationId") ??
-      this.defaultConversationId;
-    this.chatService.messages$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((message) => {
-        if (message.conversationId === this.conversationId) {
-          this.messages.push(this.toChatMessage(message));
-        }
-      });
+      this.route.snapshot.paramMap.get('conversationId') ?? this.defaultConversationId;
+    this.chatService.messages$.pipe(takeUntil(this.destroy$)).subscribe((message) => {
+      if (message.conversationId === this.conversationId) {
+        this.messages.push(this.toChatMessage(message));
+      }
+    });
     this.chatService
       .loadHistory(this.conversationId)
       .pipe(takeUntil(this.destroy$))
@@ -53,7 +50,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     }
 
     this.chatService.send(this.conversationId, content);
-    this.draft = "";
+    this.draft = '';
   }
 
   ngOnDestroy(): void {
@@ -66,7 +63,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     return {
       author: message.senderEmail,
       text: message.content,
-      timestamp: new Date(message.sentAt).toLocaleTimeString("fr-FR"),
+      timestamp: new Date(message.sentAt).toLocaleTimeString('fr-FR'),
       datetime: message.sentAt,
     };
   }

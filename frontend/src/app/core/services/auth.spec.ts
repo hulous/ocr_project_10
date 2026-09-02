@@ -44,7 +44,11 @@ describe('AuthenticationService', () => {
   it('clears the stored authentication on logout', () => {
     localStorage.setItem(
       'ycyw.authentication',
-      JSON.stringify({ token: 'jwt-token', expiresIn: 3600, email: 'client@example.com' }),
+      JSON.stringify({
+        token: 'jwt-token',
+        expiresIn: 3600,
+        email: 'client@example.com',
+      }),
     );
 
     service.logout();

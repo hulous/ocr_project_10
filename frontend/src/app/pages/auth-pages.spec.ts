@@ -1,4 +1,4 @@
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { of, throwError } from 'rxjs';
 import { LoginComponent } from './login/login';
 import { RegisterComponent } from './register/register';
@@ -23,7 +23,9 @@ describe('Authentication page components', () => {
     const auth = jasmine.createSpyObj('AuthService', ['login']);
     auth.login.and.returnValue(of({ token: 'token', expiresIn: 3600 }));
     const router = jasmine.createSpyObj('Router', ['navigateByUrl']);
-    const route = { snapshot: { queryParamMap: { get: () => '/chat?conversationId=1' } } } as unknown as ActivatedRoute;
+    const route = {
+      snapshot: { queryParamMap: { get: () => '/chat?conversationId=1' } },
+    } as unknown as ActivatedRoute;
     const component = new LoginComponent(auth, router, route);
     component.email = 'client@example.com';
     component.password = 'secret';
@@ -36,7 +38,9 @@ describe('Authentication page components', () => {
   it('reports login errors and falls back to chat when no return URL exists', () => {
     const auth = jasmine.createSpyObj('AuthService', ['login']);
     const router = jasmine.createSpyObj('Router', ['navigateByUrl']);
-    const route = { snapshot: { queryParamMap: { get: () => null } } } as unknown as ActivatedRoute;
+    const route = {
+      snapshot: { queryParamMap: { get: () => null } },
+    } as unknown as ActivatedRoute;
     const component = new LoginComponent(auth, router, route);
     component.email = 'client@example.com';
     component.password = 'secret';
@@ -54,7 +58,9 @@ describe('Authentication page components', () => {
 
   it('validates registration, registers, and navigates to login', () => {
     const auth = jasmine.createSpyObj('AuthService', ['register']);
-    auth.register.and.returnValue(of({ id: 'user-1', name: 'Client', email: 'client@example.com' }));
+    auth.register.and.returnValue(
+      of({ id: 'user-1', name: 'Client', email: 'client@example.com' }),
+    );
     const router = jasmine.createSpyObj('Router', ['navigate']);
     const component = new RegisterComponent(auth, router);
 
@@ -63,7 +69,11 @@ describe('Authentication page components', () => {
     component.password = 'long-enough-password';
     component.submit();
 
-    expect(auth.register).toHaveBeenCalledWith({ name: 'Client', email: 'client@example.com', password: 'long-enough-password' });
+    expect(auth.register).toHaveBeenCalledWith({
+      name: 'Client',
+      email: 'client@example.com',
+      password: 'long-enough-password',
+    });
     expect(router.navigate).toHaveBeenCalledWith(['/login']);
   });
 

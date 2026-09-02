@@ -26,14 +26,17 @@ export class RegisterComponent {
 
     this.isSubmitting = true;
     this.errorMessage = '';
-    this.authenticationService.register({ name: this.name, email: this.email, password: this.password }).subscribe({
-      next: () => this.router.navigate(['/login']),
-      error: (error: HttpErrorResponse) => {
-        this.isSubmitting = false;
-        this.errorMessage = error.status === 400
-          ? 'Vérifiez les informations saisies.'
-          : 'La création du compte est momentanément indisponible.';
-      },
-    });
+    this.authenticationService
+      .register({ name: this.name, email: this.email, password: this.password })
+      .subscribe({
+        next: () => this.router.navigate(['/login']),
+        error: (error: HttpErrorResponse) => {
+          this.isSubmitting = false;
+          this.errorMessage =
+            error.status === 400
+              ? 'Vérifiez les informations saisies.'
+              : 'La création du compte est momentanément indisponible.';
+        },
+      });
   }
 }
