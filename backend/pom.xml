@@ -178,7 +178,6 @@
 				<version>2.43.0</version>
 				<configuration>
 					<java>
-						<googleJavaFormat version="1.27.1"/>
 						<removeUnusedImports/>
 						<trimTrailingWhitespace/>
 						<endWithNewline/>
