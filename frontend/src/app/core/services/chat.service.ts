@@ -4,19 +4,10 @@ import { Subject, Subscription, take } from 'rxjs';
 import { RxStomp } from '@stomp/rx-stomp';
 import SockJS from 'sockjs-client';
 import { AuthService } from './auth';
+import { MessageDto } from '../models/message-dto.interface';
+import { IncomingMessagePayload } from '../models/incoming-message-payload.interface';
 
-export interface MessageDto {
-  id: string;
-  conversationId: string;
-  senderEmail: string;
-  content: string;
-  sentAt: string;
-}
-
-interface IncomingMessagePayload {
-  conversationId: string;
-  content: string;
-}
+export { MessageDto } from '../models/message-dto.interface';
 
 @Injectable({ providedIn: 'root' })
 export class ChatService {

@@ -2,13 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { ChatService, MessageDto } from '../core/services/chat.service';
-
-interface ChatMessage {
-  author: string;
-  text: string;
-  timestamp: string;
-  datetime: string;
-}
+import { ChatMessage } from '../core/models/chat-message.interface';
 
 @Component({
   selector: 'app-chat',
