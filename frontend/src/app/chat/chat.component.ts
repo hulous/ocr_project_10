@@ -1,5 +1,5 @@
 import { Component, DestroyRef, effect, inject, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
@@ -10,7 +10,7 @@ import { ChatMessage } from '../core/models/chat-message.interface';
 @Component({
   selector: 'app-chat',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [FormsModule],
   templateUrl: './chat.component.html',
 })
 export class ChatComponent {
