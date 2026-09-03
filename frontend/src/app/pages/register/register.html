@@ -5,10 +5,22 @@
     <p>Inscrivez-vous pour échanger simplement avec notre équipe support.</p>
   </div>
 
-  <form class="register-form" (ngSubmit)="submit()" #registerForm="ngForm" novalidate>
+  <form
+    class="register-form"
+    (ngSubmit)="submit()"
+    #registerForm="ngForm"
+    novalidate
+  >
     <div class="field-group">
       <label for="name">Nom</label>
-      <input id="name" name="name" type="text" autocomplete="name" [(ngModel)]="name" required />
+      <input
+        id="name"
+        name="name"
+        type="text"
+        autocomplete="name"
+        [(ngModel)]="name"
+        required
+      />
     </div>
 
     <div class="field-group">
@@ -23,35 +35,35 @@
         email
         #emailField="ngModel"
         [attr.aria-invalid]="emailField.invalid && emailField.touched"
-        />
+      />
       @if (emailField.invalid && emailField.touched) {
-        <small
-          >Saisissez une adresse email valide.</small
-          >
-        }
-      </div>
-
-      <div class="field-group">
-        <label for="register-password">Mot de passe</label>
-        <input
-          id="register-password"
-          name="password"
-          type="password"
-          autocomplete="new-password"
-          [(ngModel)]="password"
-          required
-          minlength="8"
-          />
-        <small>8 caractères minimum.</small>
-      </div>
-
-      @if (errorMessage) {
-        <p class="form-error" role="alert">{{ errorMessage }}</p>
+        <small>Saisissez une adresse email valide.</small>
       }
+    </div>
 
-      <button type="submit" [disabled]="registerForm.invalid || isSubmitting">
-        {{ isSubmitting ? 'Création...' : 'Créer mon compte' }}
-      </button>
-      <p class="login-link">Déjà inscrit ? <a routerLink="/login">Se connecter</a></p>
-    </form>
-  </section>
+    <div class="field-group">
+      <label for="register-password">Mot de passe</label>
+      <input
+        id="register-password"
+        name="password"
+        type="password"
+        autocomplete="new-password"
+        [(ngModel)]="password"
+        required
+        minlength="8"
+      />
+      <small>8 caractères minimum.</small>
+    </div>
+
+    @if (errorMessage) {
+      <p class="form-error" role="alert">{{ errorMessage }}</p>
+    }
+
+    <button type="submit" [disabled]="registerForm.invalid || isSubmitting">
+      {{ isSubmitting ? "Création..." : "Créer mon compte" }}
+    </button>
+    <p class="login-link">
+      Déjà inscrit ? <a routerLink="/login">Se connecter</a>
+    </p>
+  </form>
+</section>

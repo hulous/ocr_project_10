@@ -20,7 +20,8 @@
             "tsConfig": "tsconfig.app.json",
             "assets": ["src/assets"],
             "styles": ["src/styles/app.scss"],
-            "scripts": []
+            "scripts": [],
+            "allowedCommonJsDependencies": ["sockjs-client"]
           },
           "configurations": {
             "production": {

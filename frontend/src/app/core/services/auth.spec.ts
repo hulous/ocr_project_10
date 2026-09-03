@@ -1,9 +1,12 @@
-import { TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { vi } from 'vitest';
-import { AuthService } from './auth';
+import { TestBed } from "@angular/core/testing";
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from "@angular/common/http/testing";
+import { vi } from "vitest";
+import { AuthService } from "./auth";
 
-describe('AuthenticationService', () => {
+describe("AuthenticationService", () => {
   let service: AuthService;
   let httpTestingController: HttpTestingController;
 
@@ -23,45 +26,50 @@ describe('AuthenticationService', () => {
     localStorage.clear();
   });
 
-  it('posts credentials and stores the authentication response with its expiration timestamp', () => {
-    const credentials = { email: 'client@example.com', password: 'secret' };
-    const response = { token: 'jwt-token', expiresIn: 3600 };
+  it("posts credentials and stores the authentication response with its expiration timestamp", () => {
+    const credentials = { email: "client@example.com", password: "secret" };
+    const response = { token: "jwt-token", expiresIn: 3600 };
     const now = Date.now();
-    vi.spyOn(Date, 'now').mockReturnValue(now);
+    vi.spyOn(Date, "now").mockReturnValue(now);
 
     service.login(credentials).subscribe((loginResponse) => {
       expect(loginResponse).toEqual(response);
       expect(service.getToken()).toBe(response.token);
       expect(service.getEmail()).toBe(credentials.email);
-      expect(JSON.parse(localStorage.getItem('ycyw.authentication')!)).toEqual({
+      expect(JSON.parse(localStorage.getItem("ycyw.authentication")!)).toEqual({
         ...response,
         email: credentials.email,
         expiresAt: now + response.expiresIn,
       });
     });
 
-    const request = httpTestingController.expectOne('/api/auth/login');
-    expect(request.request.method).toBe('POST');
+    const request = httpTestingController.expectOne("/api/auth/login");
+    expect(request.request.method).toBe("POST");
     expect(request.request.body).toEqual(credentials);
     request.flush(response);
   });
 
-  it('reports an expired authentication as unauthenticated', () => {
+  it("reports an expired authentication as unauthenticated", () => {
     localStorage.setItem(
-      'ycyw.authentication',
-      JSON.stringify({ token: 'jwt-token', expiresIn: 3600, email: 'client@example.com', expiresAt: 1000 }),
+      "ycyw.authentication",
+      JSON.stringify({
+        token: "jwt-token",
+        expiresIn: 3600,
+        email: "client@example.com",
+        expiresAt: 1000,
+      }),
     );
 
     expect(service.isAuthenticated()).toBeFalse();
   });
 
-  it('clears the stored authentication on logout', () => {
+  it("clears the stored authentication on logout", () => {
     localStorage.setItem(
-      'ycyw.authentication',
+      "ycyw.authentication",
       JSON.stringify({
-        token: 'jwt-token',
+        token: "jwt-token",
         expiresIn: 3600,
-        email: 'client@example.com',
+        email: "client@example.com",
       }),
     );
 
