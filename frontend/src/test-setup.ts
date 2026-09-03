@@ -1,6 +1,6 @@
 import '@angular/compiler';
 import '@analogjs/vitest-angular/setup-zone';
-import { vi } from 'vitest';
+import { expect, vi } from 'vitest';
 import { COMPILER_OPTIONS } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { getTestBed } from '@angular/core/testing';

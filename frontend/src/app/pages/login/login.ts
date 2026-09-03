@@ -1,21 +1,20 @@
-import { Component } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { HttpErrorResponse } from '@angular/common/http';
+import { Component } from "@angular/core";
+import { ActivatedRoute, Router } from "@angular/router";
+import { HttpErrorResponse } from "@angular/common/http";
 
-import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
-import { AuthService } from '../../core/services/auth';
+import { FormsModule } from "@angular/forms";
+import { RouterLink } from "@angular/router";
+import { AuthService } from "../../core/services/auth";
 
 @Component({
-  selector: 'app-login',
-  standalone: true,
+  selector: "app-login",
   imports: [FormsModule, RouterLink],
-  templateUrl: './login.html',
+  templateUrl: "./login.html",
 })
 export class LoginComponent {
-  email = '';
-  password = '';
-  errorMessage = '';
+  email = "";
+  password = "";
+  errorMessage = "";
   isSubmitting = false;
 
   constructor(
@@ -30,19 +29,22 @@ export class LoginComponent {
     }
 
     this.isSubmitting = true;
-    this.errorMessage = '';
-    this.authenticationService.login({ email: this.email, password: this.password }).subscribe({
-      next: () => {
-        const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') || '/chat';
-        this.router.navigateByUrl(returnUrl);
-      },
-      error: (error: HttpErrorResponse) => {
-        this.isSubmitting = false;
-        this.errorMessage =
-          error.status === 401
-            ? 'Adresse email ou mot de passe incorrect.'
-            : 'La connexion est momentanément indisponible.';
-      },
-    });
+    this.errorMessage = "";
+    this.authenticationService
+      .login({ email: this.email, password: this.password })
+      .subscribe({
+        next: () => {
+          const returnUrl =
+            this.route.snapshot.queryParamMap.get("returnUrl") || "/chat";
+          this.router.navigateByUrl(returnUrl);
+        },
+        error: (error: HttpErrorResponse) => {
+          this.isSubmitting = false;
+          this.errorMessage =
+            error.status === 401
+              ? "Adresse email ou mot de passe incorrect."
+              : "La connexion est momentanément indisponible.";
+        },
+      });
   }
 }

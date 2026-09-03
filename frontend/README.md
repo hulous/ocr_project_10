@@ -7,7 +7,7 @@ d'inscription, de connexion et de tchat.
 
 ## Contenu actuel
 
-- Application Angular 17
+- Application Angular 21
 - Routes `/login`, `/register` et `/chat` protégées par authentification
 - Chargement de l'historique via REST
 - Messages temps réel via RxStomp, SockJS et STOMP
