@@ -7,7 +7,7 @@ COPY src ./src
 
 RUN mvn -B -DskipTests clean package
 
-FROM eclipse-temurin:24-jre-jammy
+FROM eclipse-temurin:24-jre
 
 WORKDIR /app
 
