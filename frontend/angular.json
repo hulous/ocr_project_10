@@ -76,5 +76,8 @@
       }
     }
   },
-  "defaultProject": "your-car-your-way-poc-chat"
+  "defaultProject": "your-car-your-way-poc-chat",
+  "cli": {
+    "analytics": false
+  }
 }
