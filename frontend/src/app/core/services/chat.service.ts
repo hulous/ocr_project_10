@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Subject, Subscription, take } from 'rxjs';
+import { firstValueFrom, Subject, Subscription } from 'rxjs';
 import { RxStomp } from '@stomp/rx-stomp';
 import SockJS from 'sockjs-client';
 import { AuthService } from './auth';
@@ -40,7 +40,7 @@ export class ChatService {
       reconnectDelay: 5000,
     });
 
-    this.client.connected$.pipe(take(1)).subscribe(() => {
+    void firstValueFrom(this.client.connected$).then(() => {
       const stompSubscription = this.client.stompClient.subscribe(
         `/topic/conversations/${conversationId}`,
         (frame) => {

@@ -2,6 +2,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Subject, of } from 'rxjs';
 import { ChatComponent } from './chat.component';
 import { ChatService, MessageDto } from '../core/services/chat.service';
+import { TestBed } from '@angular/core/testing';
 
 describe('ChatComponent', () => {
   let component: ChatComponent;
@@ -30,11 +31,16 @@ describe('ChatComponent', () => {
     const route = {
       snapshot: { paramMap: { get: () => 'conversation-1' } },
     } as unknown as ActivatedRoute;
-    component = new ChatComponent(route, chatService);
+    TestBed.configureTestingModule({
+      providers: [
+        { provide: ActivatedRoute, useValue: route },
+        { provide: ChatService, useValue: chatService },
+      ],
+    });
+    component = TestBed.runInInjectionContext(() => new ChatComponent());
   });
 
   it('loads history, connects, and accepts messages for the active conversation', () => {
-    component.ngOnInit();
     messagesSubject.next({
       ...historyMessage,
       id: 'live-1',
@@ -48,17 +54,22 @@ describe('ChatComponent', () => {
 
     expect(chatService.loadHistory).toHaveBeenCalledWith('conversation-1');
     expect(chatService.connect).toHaveBeenCalledWith('conversation-1');
-    expect(component.messages.length).toBe(2);
-    expect(component.messages[1].text).toBe('Live message');
+    expect(component.messages().length).toBe(2);
+    expect(component.messages()[1].text).toBe('Live message');
   });
 
   it('uses the demo conversation when the route has no id', () => {
     const route = {
       snapshot: { paramMap: { get: () => null } },
     } as unknown as ActivatedRoute;
-    component = new ChatComponent(route, chatService);
-
-    component.ngOnInit();
+    TestBed.resetTestingModule();
+    TestBed.configureTestingModule({
+      providers: [
+        { provide: ActivatedRoute, useValue: route },
+        { provide: ChatService, useValue: chatService },
+      ],
+    });
+    component = TestBed.runInInjectionContext(() => new ChatComponent());
 
     expect(chatService.loadHistory).toHaveBeenCalledWith('demo');
     expect(chatService.connect).toHaveBeenCalledWith('demo');
@@ -66,19 +77,19 @@ describe('ChatComponent', () => {
 
   it('sends trimmed drafts and clears them', () => {
     component.conversationId = 'conversation-1';
-    component.draft = '  Hello  ';
+    component.draft.set('  Hello  ');
 
     component.sendMessage();
 
     expect(chatService.send).toHaveBeenCalledWith('conversation-1', 'Hello');
-    expect(component.draft).toBe('');
+    expect(component.draft()).toBe('');
   });
 
   it('ignores empty drafts and disconnects on destroy', () => {
-    component.draft = '   ';
+    component.draft.set('   ');
 
     component.sendMessage();
-    component.ngOnDestroy();
+    TestBed.resetTestingModule();
 
     expect(chatService.send).not.toHaveBeenCalled();
     expect(chatService.disconnect).toHaveBeenCalled();

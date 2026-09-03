@@ -2,8 +2,8 @@
   <h2 id="chat-title">Tchat</h2>
 
   <div class="chat-window" role="log" aria-live="polite" aria-label="Messages du tchat">
-    <ng-container *ngIf="messages.length; else emptyState">
-      <article class="chat-message" *ngFor="let message of messages">
+    <ng-container *ngIf="messages().length; else emptyState">
+      <article class="chat-message" *ngFor="let message of messages()">
         <strong>{{ message.author }}</strong>
         <time [attr.datetime]="message.datetime">{{ message.timestamp }}</time>
         <p>{{ message.text }}</p>
@@ -21,12 +21,13 @@
       id="messageInput"
       name="message"
       rows="3"
-      [(ngModel)]="draft"
+      [ngModel]="draft()"
+      (ngModelChange)="draft.set($event)"
       required
       aria-required="true"
       placeholder="Tapez votre message ici"
     ></textarea>
 
-    <button type="submit" [disabled]="!draft.trim()">Envoyer</button>
+    <button type="submit" [disabled]="!draft().trim()">Envoyer</button>
   </form>
 </section>
