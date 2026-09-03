@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { vi } from 'vitest';
 import { AuthService } from './auth';
 
 describe('AuthenticationService', () => {
@@ -17,13 +18,16 @@ describe('AuthenticationService', () => {
   });
 
   afterEach(() => {
+    vi.restoreAllMocks();
     httpTestingController.verify();
     localStorage.clear();
   });
 
-  it('posts credentials and stores only the authentication response and email', () => {
+  it('posts credentials and stores the authentication response with its expiration timestamp', () => {
     const credentials = { email: 'client@example.com', password: 'secret' };
     const response = { token: 'jwt-token', expiresIn: 3600 };
+    const now = Date.now();
+    vi.spyOn(Date, 'now').mockReturnValue(now);
 
     service.login(credentials).subscribe((loginResponse) => {
       expect(loginResponse).toEqual(response);
@@ -32,6 +36,7 @@ describe('AuthenticationService', () => {
       expect(JSON.parse(localStorage.getItem('ycyw.authentication')!)).toEqual({
         ...response,
         email: credentials.email,
+        expiresAt: now + response.expiresIn,
       });
     });
 
@@ -39,6 +44,15 @@ describe('AuthenticationService', () => {
     expect(request.request.method).toBe('POST');
     expect(request.request.body).toEqual(credentials);
     request.flush(response);
+  });
+
+  it('reports an expired authentication as unauthenticated', () => {
+    localStorage.setItem(
+      'ycyw.authentication',
+      JSON.stringify({ token: 'jwt-token', expiresIn: 3600, email: 'client@example.com', expiresAt: 1000 }),
+    );
+
+    expect(service.isAuthenticated()).toBeFalse();
   });
 
   it('clears the stored authentication on logout', () => {

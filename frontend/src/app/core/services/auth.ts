@@ -17,7 +17,11 @@ export class AuthService {
   login(credentials: LoginCredentials): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(this.loginUrl, credentials).pipe(
       tap((response) => {
-        this.storeAuthentication({ ...response, email: credentials.email });
+        this.storeAuthentication({
+          ...response,
+          email: credentials.email,
+          expiresAt: Date.now() + response.expiresIn,
+        });
       }),
     );
   }
@@ -39,7 +43,8 @@ export class AuthService {
   }
 
   isAuthenticated(): boolean {
-    return this.getToken() !== null;
+    const storedAuthentication = this.getStoredAuthentication();
+    return Boolean(storedAuthentication?.token && storedAuthentication.expiresAt > Date.now());
   }
 
   private storeAuthentication(authentication: StoredAuthentication): void {
