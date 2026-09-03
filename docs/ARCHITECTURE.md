@@ -20,7 +20,7 @@ opérationnelle d'une architecture en microservices.
 | Couche | Choix | Pourquoi (résumé) |
 |---|---|---|
 | Frontend | Angular | Cohérent avec le socle déjà maîtrisé en interne et avec l'application la plus fiable de l'audit (US) |
-| Backend | Java 21 / Spring Boot | Écosystème mature, aligné avec le template interne déjà utilisé sur d'autres projets |
+| Backend | Java 24 / Spring Boot | Écosystème mature, aligné avec le template interne déjà utilisé sur d'autres projets |
 | Base de données | PostgreSQL | Transactions ACID adaptées aux réservations et paiements |
 | Authentification | JWT (access + refresh token), mots de passe hachés en bcrypt | Meilleure pratique identifiée dans l'audit de l'existant |
 | Paiement | Délégué à un prestataire externe (ex. Stripe) | Aucune donnée bancaire stockée côté Your Car Your Way |

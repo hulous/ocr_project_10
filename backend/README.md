@@ -13,7 +13,7 @@ API Spring Boot du PoC Your Car Your Way, avec :
 
 ## Prerequisites
 
-- Java 21+
+- Java 24+
 - Maven 3.8+
 - PostgreSQL running locally or reachable from this app, unless tests are run
 	with the Dockerized Maven command

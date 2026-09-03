@@ -35,7 +35,7 @@ Ce dépôt contient aujourd'hui une preuve de concept fonctionnelle avec un back
 
 ```
 your-car-your-way-poc-chat/
-├── backend/            # API Spring Boot (Java 21) — module du PoC tchat
+├── backend/            # API Spring Boot (Java 24) — module du PoC tchat
 ├── frontend/           # Application Angular — interface du PoC tchat
 ├── docs/               # Documentation fonctionnelle et technique
 │   └── diagrams/       # Diagrammes UML (composants, déploiement, classes)
@@ -51,7 +51,7 @@ dans le `README.md` de chacun de ces dossiers.
 Cohérente avec la proposition d'architecture (voir `docs/ARCHITECTURE.md`
 pour le détail et la justification des choix) :
 
-- **Backend** : Java 21, Spring Boot, Spring Security (JWT), Spring Data
+- **Backend** : Java 24, Spring Boot, Spring Security (JWT), Spring Data
   JPA, Liquibase, MapStruct
 - **Frontend** : Angular
 - **Base de données** : PostgreSQL
@@ -103,7 +103,7 @@ utiles sont :
 
 ### Exécution directe
 
-L'exécution hors Docker reste possible avec Java 21+, Maven 3.8+, Node.js et
+L'exécution hors Docker reste possible avec Java 24+, Maven 3.8+, Node.js et
 npm installés localement : `mvn spring-boot:run` dans `backend/` et `npm
 install && npm start` dans `frontend/`. Le frontend écoute alors sur `4200`;
 le proxy de développement relaie `/api` et `/ws` vers le backend.

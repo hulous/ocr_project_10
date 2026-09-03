@@ -2,7 +2,7 @@ DOCKER = docker
 COMPOSE = $(DOCKER) compose
 ROOT = $(CURDIR)
 MAKE_CMD = $(MAKE)
-BACK_TEST_IMAGE = maven:3.9.9-eclipse-temurin-21
+BACK_TEST_IMAGE = maven:3.9.9-eclipse-temurin-24
 FRONT_TEST_IMAGE = node:22-bullseye-slim
 
 .DEFAULT_GOAL := help
