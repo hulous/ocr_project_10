@@ -40,7 +40,8 @@ describe('ChatComponent', () => {
     component = TestBed.runInInjectionContext(() => new ChatComponent());
   });
 
-  it('loads history, connects, and accepts messages for the active conversation', () => {
+  it('loads history, connects, and accepts messages for the active conversation', async () => {
+    await Promise.resolve();
     messagesSubject.next({
       ...historyMessage,
       id: 'live-1',
@@ -51,6 +52,11 @@ describe('ChatComponent', () => {
       conversationId: 'other',
       id: 'ignored',
     });
+    TestBed.flushEffects();
+    for (let index = 0; index < 5; index += 1) {
+      await Promise.resolve();
+      TestBed.flushEffects();
+    }
 
     expect(chatService.loadHistory).toHaveBeenCalledWith('conversation-1');
     expect(chatService.connect).toHaveBeenCalledWith('conversation-1');
@@ -58,7 +64,7 @@ describe('ChatComponent', () => {
     expect(component.messages()[1].text).toBe('Live message');
   });
 
-  it('uses the demo conversation when the route has no id', () => {
+  it('uses the demo conversation when the route has no id', async () => {
     const route = {
       snapshot: { paramMap: { get: () => null } },
     } as unknown as ActivatedRoute;
@@ -70,6 +76,7 @@ describe('ChatComponent', () => {
       ],
     });
     component = TestBed.runInInjectionContext(() => new ChatComponent());
+    await Promise.resolve();
 
     expect(chatService.loadHistory).toHaveBeenCalledWith('demo');
     expect(chatService.connect).toHaveBeenCalledWith('demo');

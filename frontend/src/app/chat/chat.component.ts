@@ -1,9 +1,9 @@
-import { Component, DestroyRef, effect, inject, signal } from '@angular/core';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
 
 import { ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ChatService, MessageDto } from '../core/services/chat.service';
 import { ChatMessage } from '../core/models/chat-message.interface';
 
@@ -18,14 +18,12 @@ export class ChatComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly chatService = inject(ChatService);
   private readonly destroyRef = inject(DestroyRef);
-  private readonly latestMessage = toSignal(this.chatService.messages$, { initialValue: null });
   conversationId = this.defaultConversationId;
   draft = signal('');
   messages = signal<ChatMessage[]>([]);
 
   constructor() {
-    effect(() => {
-      const message = this.latestMessage();
+    this.chatService.messages$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((message) => {
       if (message?.conversationId === this.conversationId) {
         this.messages.update((messages) => [...messages, this.toChatMessage(message)]);
       }

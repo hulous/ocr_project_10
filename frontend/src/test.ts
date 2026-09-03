@@ -1,10 +1,9 @@
-import 'zone.js/testing';
+import '@angular/compiler';
+import '@analogjs/vitest-angular/setup-zone';
 import { getTestBed } from '@angular/core/testing';
 import {
-  BrowserDynamicTestingModule,
-  platformBrowserDynamicTesting,
-} from '@angular/platform-browser-dynamic/testing';
+	BrowserTestingModule,
+	platformBrowserTesting,
+} from '@angular/platform-browser/testing';
 
-(globalThis as { global?: typeof globalThis }).global = globalThis;
-
-getTestBed().initTestEnvironment(BrowserDynamicTestingModule, platformBrowserDynamicTesting());
+getTestBed().initTestEnvironment(BrowserTestingModule, platformBrowserTesting());

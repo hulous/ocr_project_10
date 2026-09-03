@@ -6,7 +6,7 @@
     "ng": "ng",
     "start": "ng serve --host 0.0.0.0 --port 4200 --proxy-config proxy.conf.json --allowed-hosts all",
     "build": "ng build",
-    "test": "ng test",
+    "test": "vitest run",
     "lint": "eslint \"src/**/*.{ts,html}\"",
     "lint:fix": "eslint \"src/**/*.{ts,html}\" --fix",
     "format": "prettier --write \"src/**/*.{ts,html,css,scss,json,md}\"",
@@ -25,6 +25,7 @@
     "rxjs": "^7.8.0",
     "sockjs-client": "^1.6.1",
     "tslib": "^2.6.0",
+    "uuid": "^10.0.0",
     "zone.js": "~0.14.0"
   },
   "devDependencies": {
@@ -45,12 +46,12 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.1.4",
     "jasmine-core": "^5.12.1",
-    "karma": "^6.4.0",
-    "karma-chrome-launcher": "^3.2.0",
-    "karma-coverage": "^2.2.0",
-    "karma-jasmine": "^5.1.0",
-    "karma-jasmine-html-reporter": "^2.0.0",
+    "@analogjs/vitest-angular": "1.8.2",
+    "@analogjs/vite-plugin-angular": "1.8.2",
+    "@stomp/stompjs": "^7.1.1",
     "prettier": "^3.0.0",
-    "typescript": "~5.4.0"
+    "typescript": "~5.4.0",
+    "vitest": "^1.6.0",
+    "jsdom": "^24.1.0"
   }
 }

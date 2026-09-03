@@ -57,12 +57,13 @@ describe('ChatService', () => {
     expect(http.get).toHaveBeenCalledWith('/api/conversations/conversation-1/messages');
   });
 
-  it('connects with the bearer token and forwards incoming messages', () => {
+  it('connects with the bearer token and forwards incoming messages', async () => {
     authService.getToken.and.returnValue('jwt-token');
     let received: MessageDto | undefined;
     service.messages$.subscribe((message) => (received = message));
 
     service.connect('conversation-1');
+    await Promise.resolve();
 
     expect(client.configure).toHaveBeenCalledWith(
       jasmine.objectContaining({
