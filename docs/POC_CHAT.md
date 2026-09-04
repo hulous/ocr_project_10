@@ -68,6 +68,11 @@ make test
 make test-e2e
 ```
 
+`make test-e2e` démarre les services Compose en arrière-plan et laisse la
+base de données de démonstration persistée dans le volume Docker. Utilisez
+`make down` pour arrêter les services, ou `make clean` pour supprimer aussi
+le volume et les artefacts locaux.
+
 ## Suivi
 
 Le détail des tâches est suivi via les issues du milestone « PoC — Fonctionnalité de tchat » sur GitHub.

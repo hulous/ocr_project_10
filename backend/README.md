@@ -13,7 +13,7 @@ API Spring Boot du PoC Your Car Your Way, avec :
 
 ## Prerequisites
 
-- Java 21+
+- Java 24+
 - Maven 3.8+
 - PostgreSQL running locally or reachable from this app, unless tests are run
 	with the Dockerized Maven command
@@ -53,6 +53,10 @@ Notes:
 - Use a strong random value for JWT_SECRET_TOKEN.
 - MAIN_APP_PORT controls the HTTP port used by Spring Boot.
 - FRONTEND_ORIGIN controls the allowed origin for WebSocket/STOMP connections and should match the frontend URL, for example `http://localhost:4250`.
+- For Docker Compose, use `POSTGRES_HOST=postgres`, `POSTGRES_PORT=5432`, and
+	`MAIN_APP_PORT=8050`; Compose publishes the database on host port `5532`.
+- For a backend started directly on the host, use `POSTGRES_HOST=localhost`
+	and the port of a locally running PostgreSQL instance.
 
 ## Run the Application
 
@@ -78,11 +82,11 @@ Run tests:
 
 ```bash
 ./mvnw test
+```
 
 The repository includes Maven Wrapper metadata. The Docker-based project
 commands remain the preferred way to avoid local JDK, Maven, and browser
 version differences; see the root `Makefile`.
-```
 
 ## Testing
 
@@ -96,6 +100,7 @@ version differences; see the root `Makefile`.
 Once the app is running, OpenAPI UI is available at:
 
 - http://localhost:${MAIN_APP_PORT}/swagger-ui/index.html
+- Health check: http://localhost:${MAIN_APP_PORT}/actuator/health
 
 ## API et WebSocket
 
@@ -107,6 +112,9 @@ Once the app is running, OpenAPI UI is available at:
 - SockJS/STOMP endpoint: `/ws`
 - Client message destination: `/app/chat.send`
 - Conversation topic: `/topic/conversations/{conversationId}`
+
+The login response contains a JWT access token and its expiry duration. This
+PoC does not issue refresh tokens.
 
 Registration expects `name`, `email`, and `password`. A message sent through
 STOMP expects `conversationId` and non-blank `content`. REST and STOMP access

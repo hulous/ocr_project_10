@@ -7,7 +7,7 @@ d'inscription, de connexion et de tchat.
 
 ## Contenu actuel
 
-- Application Angular 17
+- Application Angular 21
 - Routes `/login`, `/register` et `/chat` protégées par authentification
 - Chargement de l'historique via REST
 - Messages temps réel via RxStomp, SockJS et STOMP
@@ -44,12 +44,20 @@ make test-front
 make lint-front
 ```
 
+Les tests unitaires utilisent Vitest et sont exécutés par `npm test` (le
+watcher est désactivé par les commandes Make). La configuration Karma
+héritée d'Angular n'est pas le chemin de test utilisé par ce projet.
+
 Les tests E2E couvrent la redirection d'un visiteur non authentifié, la
 création d'un compte, la connexion et l'ouverture du tchat :
 
 ```bash
 make test-e2e
 ```
+
+Le scénario E2E démarre PostgreSQL, le backend et le frontend en arrière-plan.
+Après le test, arrêtez-les avec `make down` ou supprimez aussi le volume de
+base de données avec `make clean`.
 
 ## Ports et endpoints
 

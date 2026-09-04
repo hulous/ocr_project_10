@@ -9,7 +9,8 @@
 Monolithe modulaire exposant une API REST unique, consommée par le
 client web (Angular) et par les applications agence existantes.
 Découpage interne en modules par domaine métier (compte, catalogue &
-réservation, paiement, notification — voir diagramme ci-dessous), pour
+réservation, paiement, notification — modules prévus dans l'architecture
+cible, voir diagramme ci-dessous), pour
 rester cohérent avec le périmètre du projet sans la complexité
 opérationnelle d'une architecture en microservices.
 
@@ -20,9 +21,9 @@ opérationnelle d'une architecture en microservices.
 | Couche | Choix | Pourquoi (résumé) |
 |---|---|---|
 | Frontend | Angular | Cohérent avec le socle déjà maîtrisé en interne et avec l'application la plus fiable de l'audit (US) |
-| Backend | Java 21 / Spring Boot | Écosystème mature, aligné avec le template interne déjà utilisé sur d'autres projets |
+| Backend | Java 24 / Spring Boot | Écosystème mature, aligné avec le template interne déjà utilisé sur d'autres projets |
 | Base de données | PostgreSQL | Transactions ACID adaptées aux réservations et paiements |
-| Authentification | JWT (access + refresh token), mots de passe hachés en bcrypt | Meilleure pratique identifiée dans l'audit de l'existant |
+| Authentification | JWT d'accès avec expiration, mots de passe hachés en bcrypt | Implémentation actuelle du PoC ; le refresh token reste à prévoir |
 | Paiement | Délégué à un prestataire externe (ex. Stripe) | Aucune donnée bancaire stockée côté Your Car Your Way |
 | Conteneurisation | Docker | Reproductibilité des environnements |
 
@@ -58,6 +59,10 @@ expose PostgreSQL sur le port `5532`, le backend sur `8050` et le frontend
 sur `4250`.
 
 ## Ce que le PoC de ce dépôt valide spécifiquement
+
+Le dépôt implémente actuellement l'authentification, les utilisateurs et le
+tchat. Les modules catalogue/réservation, paiement et notification sont des
+éléments de l'architecture cible, mais ne sont pas livrés par ce PoC.
 
 Le PoC porte uniquement sur la fonctionnalité de tchat et vise à
 vérifier que l'architecture ci-dessus supporte un flux **temps réel**

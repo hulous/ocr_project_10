@@ -5,10 +5,22 @@
     <p>Inscrivez-vous pour échanger simplement avec notre équipe support.</p>
   </div>
 
-  <form class="register-form" (ngSubmit)="submit()" #registerForm="ngForm" novalidate>
+  <form
+    class="register-form"
+    (ngSubmit)="submit()"
+    #registerForm="ngForm"
+    novalidate
+  >
     <div class="field-group">
       <label for="name">Nom</label>
-      <input id="name" name="name" type="text" autocomplete="name" [(ngModel)]="name" required />
+      <input
+        id="name"
+        name="name"
+        type="text"
+        autocomplete="name"
+        [(ngModel)]="name"
+        required
+      />
     </div>
 
     <div class="field-group">
@@ -24,9 +36,9 @@
         #emailField="ngModel"
         [attr.aria-invalid]="emailField.invalid && emailField.touched"
       />
-      <small *ngIf="emailField.invalid && emailField.touched"
-        >Saisissez une adresse email valide.</small
-      >
+      @if (emailField.invalid && emailField.touched) {
+        <small>Saisissez une adresse email valide.</small>
+      }
     </div>
 
     <div class="field-group">
@@ -43,11 +55,15 @@
       <small>8 caractères minimum.</small>
     </div>
 
-    <p *ngIf="errorMessage" class="form-error" role="alert">{{ errorMessage }}</p>
+    @if (errorMessage) {
+      <p class="form-error" role="alert">{{ errorMessage }}</p>
+    }
 
     <button type="submit" [disabled]="registerForm.invalid || isSubmitting">
-      {{ isSubmitting ? 'Création...' : 'Créer mon compte' }}
+      {{ isSubmitting ? "Création..." : "Créer mon compte" }}
     </button>
-    <p class="login-link">Déjà inscrit ? <a routerLink="/login">Se connecter</a></p>
+    <p class="login-link">
+      Déjà inscrit ? <a routerLink="/login">Se connecter</a>
+    </p>
   </form>
 </section>
