@@ -1,22 +1,21 @@
-import { HttpErrorResponse } from '@angular/common/http';
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
-import { AuthService } from '../../core/services/auth';
+import { HttpErrorResponse } from "@angular/common/http";
+import { Component } from "@angular/core";
+import { Router } from "@angular/router";
+
+import { FormsModule } from "@angular/forms";
+import { RouterLink } from "@angular/router";
+import { AuthService } from "../../core/services/auth";
 
 @Component({
-  selector: 'app-register',
-  standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
-  templateUrl: './register.html',
+  selector: "app-register",
+  imports: [FormsModule, RouterLink],
+  templateUrl: "./register.html",
 })
 export class RegisterComponent {
-  name = '';
-  email = '';
-  password = '';
-  errorMessage = '';
+  name = "";
+  email = "";
+  password = "";
+  errorMessage = "";
   isSubmitting = false;
 
   constructor(
@@ -25,22 +24,27 @@ export class RegisterComponent {
   ) {}
 
   submit(): void {
-    if (this.isSubmitting || !this.name || !this.email || this.password.length < 8) {
+    if (
+      this.isSubmitting ||
+      !this.name ||
+      !this.email ||
+      this.password.length < 8
+    ) {
       return;
     }
 
     this.isSubmitting = true;
-    this.errorMessage = '';
+    this.errorMessage = "";
     this.authenticationService
       .register({ name: this.name, email: this.email, password: this.password })
       .subscribe({
-        next: () => this.router.navigate(['/login']),
+        next: () => this.router.navigate(["/login"]),
         error: (error: HttpErrorResponse) => {
           this.isSubmitting = false;
           this.errorMessage =
             error.status === 400
-              ? 'Vérifiez les informations saisies.'
-              : 'La création du compte est momentanément indisponible.';
+              ? "Vérifiez les informations saisies."
+              : "La création du compte est momentanément indisponible.";
         },
       });
   }

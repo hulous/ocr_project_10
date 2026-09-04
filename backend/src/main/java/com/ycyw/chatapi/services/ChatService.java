@@ -9,6 +9,7 @@ import com.ycyw.chatapi.repositories.MessageRepository;
 import com.ycyw.chatapi.repositories.UserRepository;
 import java.util.List;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,7 +23,8 @@ public class ChatService {
       MessageRepository messageRepository,
       UserRepository userRepository,
       MessageMapper messageMapper,
-      SimpMessagingTemplate messagingTemplate) {
+      SimpMessagingTemplate messagingTemplate
+  ) {
     this.messageRepository = messageRepository;
     this.userRepository = userRepository;
     this.messageMapper = messageMapper;
@@ -30,17 +32,15 @@ public class ChatService {
   }
 
   public MessageDto sendMessage(String userEmail, IncomingMessageDto incoming) {
-    User sender =
-        userRepository
-            .findByEmail(userEmail)
-            .orElseThrow(() -> new IllegalStateException("Authenticated user not found"));
+    User sender = userRepository
+      .findByEmail(userEmail)
+      .orElseThrow(() -> new IllegalStateException("Authenticated user not found"));
 
-    Message message =
-        new Message()
-            .setConversationId(incoming.conversationId())
-            .setSender(sender)
-            .setContent(incoming.content())
-            .setSentAt(java.time.Instant.now());
+    Message message = new Message()
+      .setConversationId(incoming.conversationId())
+      .setSender(sender)
+      .setContent(incoming.content())
+      .setSentAt(java.time.Instant.now());
 
     Message saved = messageRepository.save(message);
     MessageDto response = messageMapper.toDto(saved);
@@ -50,9 +50,11 @@ public class ChatService {
     return response;
   }
 
+  @Transactional(readOnly = true)
   public List<MessageDto> getConversationHistory(String conversationId) {
-    return messageRepository.findByConversationIdOrderBySentAtAsc(conversationId).stream()
-        .map(messageMapper::toDto)
-        .toList();
+    return messageRepository
+      .findByConversationIdOrderBySentAtAsc(conversationId).stream()
+      .map(messageMapper::toDto)
+      .toList();
   }
 }
