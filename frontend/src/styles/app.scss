@@ -1,12 +1,12 @@
-@use 'variables' as *;
-@use 'forms';
+@use "variables" as *;
+@use "forms";
 
 :root {
   font-family:
     system-ui,
     -apple-system,
     BlinkMacSystemFont,
-    'Segoe UI',
+    "Segoe UI",
     sans-serif;
   line-height: 1.5;
   color: $color-text;
