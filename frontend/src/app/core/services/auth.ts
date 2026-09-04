@@ -5,10 +5,7 @@ import { LoginCredentials } from '../models/login-request.interface';
 import { LoginResponse } from '../models/login-response.interface';
 import { RegisterRequest } from '../models/register-request.interface';
 import { UserResponse } from '../models/user-response.interface';
-
-interface StoredAuthentication extends LoginResponse {
-  email: string;
-}
+import { StoredAuthentication } from '../models/stored-authentication.interface';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {

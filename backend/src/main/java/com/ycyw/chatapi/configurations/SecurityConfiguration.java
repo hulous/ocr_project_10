@@ -48,6 +48,8 @@ public class SecurityConfiguration {
           authorize.
             requestMatchers(PUBLIC_URLS).
             permitAll().
+            requestMatchers("/actuator/health").
+            permitAll().
             requestMatchers(PathPatternRequestMatcher.withDefaults().matcher("/ws/**")).
             permitAll().
             anyRequest().

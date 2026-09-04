@@ -9,5 +9,6 @@ import org.mapstruct.Mapping;
 public interface MessageMapper {
 
   @Mapping(source = "sender.email", target = "senderEmail")
+  @Mapping(source = "sender.name", target = "senderName")
   MessageDto toDto(Message message);
 }
