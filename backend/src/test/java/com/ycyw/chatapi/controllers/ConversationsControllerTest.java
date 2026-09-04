@@ -24,8 +24,8 @@ class ConversationsControllerTest {
   @Test
   void getHistoryReturnsMappedMessagesInOrder() {
     String conversationId = "demo";
-    MessageDto dto1 = new MessageDto(null, conversationId, "john@example.com", "Hello", null);
-    MessageDto dto2 = new MessageDto(null, conversationId, "john@example.com", "Bye", null);
+    MessageDto dto1 = new MessageDto(null, conversationId, "john@example.com", "John", "Hello", null);
+    MessageDto dto2 = new MessageDto(null, conversationId, "john@example.com", "John", "Bye", null);
 
     when(chatService.getConversationHistory(conversationId)).thenReturn(List.of(dto1, dto2));
 

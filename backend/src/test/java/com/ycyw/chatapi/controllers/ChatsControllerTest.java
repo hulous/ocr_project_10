@@ -31,7 +31,12 @@ class ChatsControllerTest {
     IncomingMessageDto incoming = new IncomingMessageDto("demo", "hello world");
     MessageDto response =
         new MessageDto(
-            null, incoming.conversationId(), "john@example.com", incoming.content(), Instant.now());
+          null,
+          incoming.conversationId(),
+          "john@example.com",
+          "John",
+          incoming.content(),
+          Instant.now());
 
     when(chatService.sendMessage(principal.getName(), incoming)).thenReturn(response);
 
