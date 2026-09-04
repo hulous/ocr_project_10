@@ -7,12 +7,15 @@
 ## 🎯 Objectif de ce dépôt
 
 Ce dépôt ne couvre **pas** l'ensemble du périmètre fonctionnel de
-l'application Your Car Your Way (cf. [cahier des charges](docs/Cahier_des_charges_YourCarYourWay_v2.odt)).
+l'application Your Car Your Way. Le cahier des charges et la proposition
+d'architecture de référence sont des documents externes au dépôt ; le
+résumé technique local est disponible dans
+[`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
 Il se limite à une **preuve de concept (PoC)** portant uniquement sur la
 fonctionnalité de tchat, afin de :
 
-- valider que l'architecture proposée (Spring Boot + Angular, cf.
-  [proposition d'architecture](docs/Proposition_architecture_YourCarYourWay.odt))
+- valider que l'architecture proposée (Spring Boot + Angular, cf. le
+  [résumé d'architecture](docs/ARCHITECTURE.md))
   supporte un flux temps réel, en plus des échanges REST classiques ;
 - donner à l'équipe un exemple concret de la structure de code et des
   conventions attendues avant d'attaquer le développement du reste de
@@ -26,10 +29,11 @@ Ce dépôt contient aujourd'hui une preuve de concept fonctionnelle avec un back
 
 | Document | Contenu |
 |---|---|
-| [`docs/Cahier_des_charges_YourCarYourWay_v2.odt`](docs/Cahier_des_charges_YourCarYourWay_v2.odt) | Besoins fonctionnels consolidés, user stories, critères d'acceptation |
-| [`docs/Proposition_architecture_YourCarYourWay.odt`](docs/Proposition_architecture_YourCarYourWay.odt) | Audit de l'existant, architecture cible, modèle de données, choix technologiques |
 | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | Résumé technique rapide (lecture 5 minutes) à destination des développeurs |
 | [`docs/POC_CHAT.md`](docs/POC_CHAT.md) | Périmètre précis, scénario et critères de réussite du PoC |
+
+Les documents fonctionnels et la proposition d'architecture complète sont
+gérés séparément et ne sont pas versionnés dans ce dépôt.
 
 ## 🗂️ Structure du dépôt
 
@@ -84,6 +88,8 @@ Puis ouvrir :
 
 Swagger/OpenAPI est disponible à
 `http://localhost:8050/swagger-ui/index.html`.
+L'état de santé du backend est disponible à
+`http://localhost:8050/actuator/health`.
 
 ### Commandes Make
 
@@ -104,9 +110,12 @@ utiles sont :
 ### Exécution directe
 
 L'exécution hors Docker reste possible avec Java 24+, Maven 3.8+, Node.js et
-npm installés localement : `mvn spring-boot:run` dans `backend/` et `npm
-install && npm start` dans `frontend/`. Le frontend écoute alors sur `4200`;
-le proxy de développement relaie `/api` et `/ws` vers le backend.
+npm installés localement. Dans ce cas, PostgreSQL doit être accessible sur
+`localhost:5532` (ou les variables `POSTGRES_*` doivent être adaptées), et
+`MAIN_APP_PORT` doit être défini à `8050` pour conserver les URLs ci-dessous.
+Lancez `mvn spring-boot:run` dans `backend/`, puis `npm install && npm start`
+dans `frontend/`. Le frontend écoute alors sur `4200`; le proxy de
+développement relaie `/api` et `/ws` vers le backend.
 
 ## Ports, routes et protocole
 
@@ -119,7 +128,9 @@ le proxy de développement relaie `/api` et `/ws` vers le backend.
 - WebSocket SockJS/STOMP : endpoint `/ws`, publication `/app/chat.send`,
   abonnement `/topic/conversations/{conversationId}`
 
-Les routes API protégées et la connexion STOMP nécessitent un JWT. Le client
+Les routes API protégées et la connexion STOMP nécessitent un JWT d'accès.
+Le login renvoie ce jeton et sa durée d'expiration ; aucun mécanisme de
+refresh token n'est implémenté dans ce PoC. Le client
 envoie le jeton dans l'en-tête `Authorization` de la requête REST et dans les
 headers STOMP de connexion.
 
