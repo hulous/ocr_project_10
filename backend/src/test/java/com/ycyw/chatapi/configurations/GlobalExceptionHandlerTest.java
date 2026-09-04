@@ -1,18 +1,16 @@
 package com.ycyw.chatapi.configurations;
 
-import com.ycyw.chatapi.exceptions.ApiException;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import com.ycyw.chatapi.exceptions.ApiException;
+import java.lang.reflect.Method;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.BindException;
 import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-
-import java.lang.reflect.Method;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class GlobalExceptionHandlerTest {
 
@@ -20,13 +18,16 @@ class GlobalExceptionHandlerTest {
 
   @Test
   void handleValidationExceptionConcatenatesFieldMessages() throws Exception {
-    Method method = GlobalExceptionHandlerTest.class.getDeclaredMethod("sampleValidationTarget", String.class);
+    Method method =
+        GlobalExceptionHandlerTest.class.getDeclaredMethod("sampleValidationTarget", String.class);
     MethodParameter parameter = new MethodParameter(method, 0);
-    BeanPropertyBindingResult bindingResult = new BeanPropertyBindingResult(new Object(), "payload");
+    BeanPropertyBindingResult bindingResult =
+        new BeanPropertyBindingResult(new Object(), "payload");
     bindingResult.addError(new FieldError("payload", "email", "Email is required"));
     bindingResult.addError(new FieldError("payload", "password", "Password is required"));
 
-    MethodArgumentNotValidException exception = new MethodArgumentNotValidException(parameter, bindingResult);
+    MethodArgumentNotValidException exception =
+        new MethodArgumentNotValidException(parameter, bindingResult);
 
     var response = handler.handleValidationException(exception);
 

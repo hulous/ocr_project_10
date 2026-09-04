@@ -1,5 +1,7 @@
 package com.ycyw.chatapi.services;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import com.ycyw.chatapi.entities.User;
 import com.ycyw.chatapi.exceptions.ApiException;
 import org.junit.jupiter.api.AfterEach;
@@ -7,8 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class CurrentUserServiceTest {
 
@@ -22,7 +22,8 @@ class CurrentUserServiceTest {
   @Test
   void getCurrentUserReturnsAuthenticatedUser() {
     User user = new User().setId(1).setEmail("john@example.com");
-    SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user, null));
+    SecurityContextHolder.getContext()
+        .setAuthentication(new UsernamePasswordAuthenticationToken(user, null));
 
     User result = service.getCurrentUser();
 
@@ -41,7 +42,8 @@ class CurrentUserServiceTest {
 
   @Test
   void getCurrentUserThrowsWhenPrincipalIsNotUser() {
-    SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("string-principal", null));
+    SecurityContextHolder.getContext()
+        .setAuthentication(new UsernamePasswordAuthenticationToken("string-principal", null));
 
     ApiException exception = assertThrows(ApiException.class, () -> service.getCurrentUser());
 
@@ -52,7 +54,8 @@ class CurrentUserServiceTest {
   @Test
   void getCurrentUserOrNullReturnsUserWhenAuthenticated() {
     User user = new User().setId(2).setEmail("alice@example.com");
-    SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user, null));
+    SecurityContextHolder.getContext()
+        .setAuthentication(new UsernamePasswordAuthenticationToken(user, null));
 
     User result = service.getCurrentUserOrNull();
 
@@ -68,7 +71,8 @@ class CurrentUserServiceTest {
 
   @Test
   void getCurrentUserOrNullReturnsNullWhenPrincipalIsNotUser() {
-    SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("not-a-user", null));
+    SecurityContextHolder.getContext()
+        .setAuthentication(new UsernamePasswordAuthenticationToken("not-a-user", null));
 
     User result = service.getCurrentUserOrNull();
 

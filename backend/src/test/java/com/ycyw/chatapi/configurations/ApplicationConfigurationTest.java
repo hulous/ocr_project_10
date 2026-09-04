@@ -1,8 +1,14 @@
 package com.ycyw.chatapi.configurations;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.when;
+
 import com.ycyw.chatapi.entities.User;
 import com.ycyw.chatapi.repositories.UserRepository;
-
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -15,25 +21,14 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertInstanceOf;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.when;
-
 @ExtendWith(MockitoExtension.class)
 class ApplicationConfigurationTest {
 
-  @Mock
-  private UserRepository userRepository;
+  @Mock private UserRepository userRepository;
 
-  @Mock
-  private AuthenticationConfiguration authenticationConfiguration;
+  @Mock private AuthenticationConfiguration authenticationConfiguration;
 
-  @Mock
-  private AuthenticationManager authenticationManager;
+  @Mock private AuthenticationManager authenticationManager;
 
   @Test
   void userDetailsServiceLoadsUserByEmail() {
@@ -53,10 +48,10 @@ class ApplicationConfigurationTest {
 
     UserDetailsService service = configuration.userDetailsService();
 
-    UsernameNotFoundException exception = assertThrows(
-      UsernameNotFoundException.class,
-      () -> service.loadUserByUsername("missing@example.com")
-    );
+    UsernameNotFoundException exception =
+        assertThrows(
+            UsernameNotFoundException.class,
+            () -> service.loadUserByUsername("missing@example.com"));
     assertEquals("User not found", exception.getMessage());
   }
 

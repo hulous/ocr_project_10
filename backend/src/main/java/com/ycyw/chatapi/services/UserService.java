@@ -5,7 +5,6 @@ import com.ycyw.chatapi.exceptions.ApiException;
 import com.ycyw.chatapi.mappers.UserMapper;
 import com.ycyw.chatapi.repositories.UserRepository;
 import com.ycyw.chatapi.responses.UserResponse;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 

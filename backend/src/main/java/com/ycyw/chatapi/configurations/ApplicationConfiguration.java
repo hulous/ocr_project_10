@@ -1,10 +1,8 @@
 package com.ycyw.chatapi.configurations;
 
 import com.ycyw.chatapi.repositories.UserRepository;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -23,9 +21,10 @@ public class ApplicationConfiguration {
 
   @Bean
   UserDetailsService userDetailsService() {
-    return username -> userRepository.findByEmail(username).orElseThrow(
-      () -> new UsernameNotFoundException("User not found")
-    );
+    return username ->
+        userRepository
+            .findByEmail(username)
+            .orElseThrow(() -> new UsernameNotFoundException("User not found"));
   }
 
   @Bean

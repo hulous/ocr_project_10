@@ -7,7 +7,6 @@ import com.ycyw.chatapi.mappers.UserMapper;
 import com.ycyw.chatapi.repositories.UserRepository;
 import com.ycyw.chatapi.responses.LoginResponse;
 import com.ycyw.chatapi.responses.UserResponse;
-
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -29,8 +28,7 @@ public class AuthenticationService {
       PasswordEncoder passwordEncoder,
       JwtService jwtService,
       UserMapper userMapper,
-      CurrentUserService currentUserService
-  ) {
+      CurrentUserService currentUserService) {
     this.authenticationManager = authenticationManager;
     this.userRepository = userRepository;
     this.passwordEncoder = passwordEncoder;
@@ -44,21 +42,23 @@ public class AuthenticationService {
       throw new IllegalArgumentException("A user with this email already exists");
     }
 
-    User user = new User()
-      .setName(input.getName())
-      .setEmail(input.getEmail())
-      .setPassword(passwordEncoder.encode(input.getPassword()));
+    User user =
+        new User()
+            .setName(input.getName())
+            .setEmail(input.getEmail())
+            .setPassword(passwordEncoder.encode(input.getPassword()));
 
     return userRepository.save(user);
   }
 
   public User authenticate(LoginUserDto input) {
-    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(input.getEmail(), input.getPassword());
+    UsernamePasswordAuthenticationToken authToken =
+        new UsernamePasswordAuthenticationToken(input.getEmail(), input.getPassword());
     authenticationManager.authenticate(authToken);
 
     return userRepository
-      .findByEmail(input.getEmail())
-      .orElseThrow(() -> new UsernameNotFoundException("Invalid credentials"));
+        .findByEmail(input.getEmail())
+        .orElseThrow(() -> new UsernameNotFoundException("Invalid credentials"));
   }
 
   public UserResponse registrateResponse(RegisterUserDto registerUserDto) {
@@ -71,9 +71,7 @@ public class AuthenticationService {
     User authenticatedUser = authenticate(loginUserDto);
     String jwtToken = jwtService.generateToken(authenticatedUser);
 
-    return new LoginResponse()
-      .setToken(jwtToken)
-      .setExpiresIn(jwtService.getExpirationTime());
+    return new LoginResponse().setToken(jwtToken).setExpiresIn(jwtService.getExpirationTime());
   }
 
   public UserResponse authenticatedUser() {

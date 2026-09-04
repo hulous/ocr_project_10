@@ -4,7 +4,6 @@ import com.ycyw.chatapi.dtos.IncomingMessageDto;
 import com.ycyw.chatapi.services.ChatService;
 import jakarta.validation.Valid;
 import java.security.Principal;
-
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Controller;

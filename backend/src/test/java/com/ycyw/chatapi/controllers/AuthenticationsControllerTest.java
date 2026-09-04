@@ -1,12 +1,16 @@
 package com.ycyw.chatapi.controllers;
 
-import com.ycyw.chatapi.services.AuthenticationService;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.when;
+
 import com.ycyw.chatapi.dtos.LoginUserDto;
 import com.ycyw.chatapi.dtos.RegisterUserDto;
 import com.ycyw.chatapi.entities.User;
 import com.ycyw.chatapi.responses.LoginResponse;
 import com.ycyw.chatapi.responses.UserResponse;
-
+import com.ycyw.chatapi.services.AuthenticationService;
+import java.util.Date;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -16,25 +20,19 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 
-import java.util.Date;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.when;
-
 @ExtendWith(MockitoExtension.class)
 class AuthenticationsControllerTest {
 
-  @Mock
-  private AuthenticationService authenticationService;
+  @Mock private AuthenticationService authenticationService;
 
-  @InjectMocks
-  private AuthenticationsController controller;
+  @InjectMocks private AuthenticationsController controller;
 
   @Test
   void registrateReturnsCreatedUser() {
-    RegisterUserDto dto = new RegisterUserDto().setEmail("john@example.com").setPassword("pwd").setName("John");
-    UserResponse responseBody = new UserResponse().setId(1).setEmail("john@example.com").setName("John");
+    RegisterUserDto dto =
+        new RegisterUserDto().setEmail("john@example.com").setPassword("pwd").setName("John");
+    UserResponse responseBody =
+        new UserResponse().setId(1).setEmail("john@example.com").setName("John");
 
     when(authenticationService.registrateResponse(dto)).thenReturn(responseBody);
 
@@ -47,7 +45,8 @@ class AuthenticationsControllerTest {
   @Test
   void registrateReturnsBadRequestOnDuplicateEmail() {
     RegisterUserDto dto = new RegisterUserDto().setEmail("john@example.com");
-    when(authenticationService.registrateResponse(dto)).thenThrow(new IllegalArgumentException("A user with this email already exists"));
+    when(authenticationService.registrateResponse(dto))
+        .thenThrow(new IllegalArgumentException("A user with this email already exists"));
 
     assertThrows(IllegalArgumentException.class, () -> controller.registrate(dto));
   }
@@ -78,7 +77,8 @@ class AuthenticationsControllerTest {
   @Test
   void authenticateReturnsUnauthorizedOnBadCredentials() {
     LoginUserDto dto = new LoginUserDto().setEmail("john@example.com").setPassword("bad");
-    when(authenticationService.authenticateResponse(dto)).thenThrow(new BadCredentialsException("bad"));
+    when(authenticationService.authenticateResponse(dto))
+        .thenThrow(new BadCredentialsException("bad"));
 
     assertThrows(BadCredentialsException.class, () -> controller.authenticate(dto));
   }
@@ -93,18 +93,20 @@ class AuthenticationsControllerTest {
 
   @Test
   void authenticatedUserReturnsCurrentPrincipal() {
-    User current = new User()
-      .setId(99)
-      .setName("Alice")
-      .setEmail("alice@example.com")
-      .setCreatedAt(new Date())
-      .setUpdatedAt(new Date());
-    UserResponse responseBody = new UserResponse()
-      .setId(99)
-      .setName("Alice")
-      .setEmail("alice@example.com")
-      .setCreatedAt(current.getCreatedAt())
-      .setUpdatedAt(current.getUpdatedAt());
+    User current =
+        new User()
+            .setId(99)
+            .setName("Alice")
+            .setEmail("alice@example.com")
+            .setCreatedAt(new Date())
+            .setUpdatedAt(new Date());
+    UserResponse responseBody =
+        new UserResponse()
+            .setId(99)
+            .setName("Alice")
+            .setEmail("alice@example.com")
+            .setCreatedAt(current.getCreatedAt())
+            .setUpdatedAt(current.getUpdatedAt());
 
     when(authenticationService.authenticatedUser()).thenReturn(responseBody);
 
@@ -115,5 +117,4 @@ class AuthenticationsControllerTest {
     assertEquals(responseBody.getId(), body.getId());
     assertEquals(responseBody.getEmail(), body.getEmail());
   }
-
 }

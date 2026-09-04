@@ -18,7 +18,8 @@ server:
   port: "${MAIN_APP_PORT}"
 
 frontend:
-  origin: "http://localhost"
+  # Allowed origin for browser WebSocket/STOMP clients.
+  origin: "${FRONTEND_ORIGIN}"
 
 security:
   jwt:

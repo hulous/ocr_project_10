@@ -1,21 +1,19 @@
 package com.ycyw.chatapi;
 
-import org.junit.jupiter.api.Test;
-
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.test.context.SpringBootTest;
-
-import org.mockito.MockedStatic;
 import static org.mockito.Mockito.mockStatic;
+
+import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
+import org.springframework.boot.SpringApplication;
 
 class BaseApplicationTests {
 
-	@Test
+  @Test
   void constructorCanBeInstantiated() {
     new ChatApiApplication();
   }
 
-	@Test
+  @Test
   void mainDelegatesToSpringApplicationRun() {
     String[] args = new String[] {"--spring.main.banner-mode=off"};
 

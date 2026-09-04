@@ -7,9 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import javax.sql.DataSource;
-
 import org.springframework.boot.jdbc.autoconfigure.DataSourceProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,9 +15,8 @@ import org.springframework.util.StringUtils;
 
 @Configuration(proxyBeanMethods = false)
 public class DatabaseCreationConfiguration {
-  private static final Pattern POSTGRES_URL_PATTERN = Pattern.compile(
-    "^jdbc:postgresql://([^/]+)/([^?]+)(?:\\?(.*))?$"
-  );
+  private static final Pattern POSTGRES_URL_PATTERN =
+      Pattern.compile("^jdbc:postgresql://([^/]+)/([^?]+)(?:\\?(.*))?$");
 
   @Bean
   public DataSource dataSource(DataSourceProperties properties) {
@@ -41,7 +38,9 @@ public class DatabaseCreationConfiguration {
     }
 
     String databaseName = extractDatabaseName(url);
-    if (!StringUtils.hasText(databaseName) || "postgres".equalsIgnoreCase(databaseName) || "template1".equalsIgnoreCase(databaseName)) {
+    if (!StringUtils.hasText(databaseName)
+        || "postgres".equalsIgnoreCase(databaseName)
+        || "template1".equalsIgnoreCase(databaseName)) {
       return;
     }
 
@@ -51,12 +50,15 @@ public class DatabaseCreationConfiguration {
         createDatabase(adminConnection, databaseName);
       }
     } catch (SQLException ex) {
-      throw new IllegalStateException("Unable to create PostgreSQL database '" + databaseName + "'.", ex);
+      throw new IllegalStateException(
+          "Unable to create PostgreSQL database '" + databaseName + "'.", ex);
     }
   }
 
-  private static boolean databaseExists(Connection connection, String databaseName) throws SQLException {
-    try (PreparedStatement stmt = connection.prepareStatement("SELECT 1 FROM pg_database WHERE datname = ?")) {
+  private static boolean databaseExists(Connection connection, String databaseName)
+      throws SQLException {
+    try (PreparedStatement stmt =
+        connection.prepareStatement("SELECT 1 FROM pg_database WHERE datname = ?")) {
       stmt.setString(1, databaseName);
 
       try (ResultSet rs = stmt.executeQuery()) {
@@ -65,7 +67,8 @@ public class DatabaseCreationConfiguration {
     }
   }
 
-  private static void createDatabase(Connection connection, String databaseName) throws SQLException {
+  private static void createDatabase(Connection connection, String databaseName)
+      throws SQLException {
     String quotedName = "\"" + databaseName.replace("\"", "\"\"") + "\"";
 
     try (PreparedStatement stmt = connection.prepareStatement("CREATE DATABASE " + quotedName)) {

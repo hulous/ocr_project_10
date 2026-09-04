@@ -1,4 +1,11 @@
 const { Config } = require('karma');
+const fs = require('fs');
+
+process.env.CHROME_BIN =
+  process.env.CHROME_BIN ||
+  (fs.existsSync('/usr/bin/chromium')
+    ? '/usr/bin/chromium'
+    : '/usr/bin/google-chrome-stable');
 
 module.exports = function (config) {
   config.set({
@@ -23,7 +30,21 @@ module.exports = function (config) {
       reporters: [
         { type: 'html' },
         { type: 'text-summary' }
-      ]
+      ],
+      check: {
+        global: {
+          statements: 90,
+          branches: 90,
+          functions: 90,
+          lines: 90
+        }
+      }
+    },
+    customLaunchers: {
+      ChromeHeadlessNoSandbox: {
+        base: 'ChromeHeadless',
+        flags: ['--no-sandbox', '--disable-gpu']
+      }
     },
     reporters: ['progress', 'kjhtml'],
     port: 9876,
