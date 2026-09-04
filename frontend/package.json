@@ -6,7 +6,7 @@
     "ng": "ng",
     "start": "ng serve --host 0.0.0.0 --port 4200 --proxy-config proxy.conf.json --allowed-hosts all",
     "build": "ng build",
-    "test": "vitest run",
+    "test": "sh -c 'vitest run --coverage'",
     "lint": "eslint \"src/**/*.{ts,html}\"",
     "lint:fix": "eslint \"src/**/*.{ts,html}\" --fix",
     "format": "prettier --write \"src/**/*.{ts,html,css,scss,json,md}\"",
