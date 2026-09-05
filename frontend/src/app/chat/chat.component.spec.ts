@@ -92,6 +92,33 @@ describe("ChatComponent", () => {
     expect(component.draft()).toBe("");
   });
 
+  it("sends the draft when Enter is pressed", () => {
+    component.conversationId = "conversation-1";
+    component.draft.set("Hello");
+    const event = {
+      shiftKey: false,
+      preventDefault: jasmine.createSpy("preventDefault"),
+    } as unknown as KeyboardEvent;
+
+    component.handleEnterKey(event);
+
+    expect(event.preventDefault).toHaveBeenCalled();
+    expect(chatService.send).toHaveBeenCalledWith("conversation-1", "Hello");
+  });
+
+  it("keeps the newline behavior for Shift+Enter", () => {
+    component.draft.set("Hello");
+    const event = {
+      shiftKey: true,
+      preventDefault: jasmine.createSpy("preventDefault"),
+    } as unknown as KeyboardEvent;
+
+    component.handleEnterKey(event);
+
+    expect(event.preventDefault).not.toHaveBeenCalled();
+    expect(chatService.send).not.toHaveBeenCalled();
+  });
+
   it("ignores empty drafts and disconnects on destroy", () => {
     component.draft.set("   ");
 

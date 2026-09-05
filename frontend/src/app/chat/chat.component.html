@@ -1,11 +1,12 @@
 <section aria-labelledby="chat-title">
-  <h2 id="chat-title">Tchat</h2>
+  <h1 id="chat-title">Tchat</h1>
 
   <div
     class="chat-window"
     role="log"
     aria-live="polite"
     aria-label="Messages du tchat"
+    tabindex="0"
   >
     @if (messages().length) {
       @for (message of messages(); track message) {
@@ -30,8 +31,10 @@
       rows="3"
       [ngModel]="draft()"
       (ngModelChange)="draft.set($event)"
+      (keydown.enter)="handleEnterKey($event)"
       required
       aria-required="true"
+      autofocus
       placeholder="Tapez votre message ici"
     ></textarea>
 

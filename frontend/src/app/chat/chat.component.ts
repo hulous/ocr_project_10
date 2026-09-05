@@ -58,6 +58,13 @@ export class ChatComponent {
     this.draft.set("");
   }
 
+  handleEnterKey(event: KeyboardEvent): void {
+    if (!event.shiftKey) {
+      event.preventDefault();
+      this.sendMessage();
+    }
+  }
+
   private toChatMessage(message: MessageDto): ChatMessage {
     return {
       author: message.senderName || message.senderEmail,
