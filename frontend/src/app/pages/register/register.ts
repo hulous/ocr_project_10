@@ -36,7 +36,11 @@ export class RegisterComponent {
     this.isSubmitting.set(true);
     this.errorMessage.set("");
     this.authenticationService
-      .register({ name: this.name(), email: this.email(), password: this.password() })
+      .register({
+        name: this.name(),
+        email: this.email(),
+        password: this.password(),
+      })
       .subscribe({
         next: () => this.router.navigate(["/login"]),
         error: (error: HttpErrorResponse) => {
