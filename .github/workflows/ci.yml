@@ -84,13 +84,13 @@ jobs:
       - name: Configure test environment
         run: |
           printf '%s\n' \
-            "POSTGRES_DB=$POSTGRES_DB" \
-            "POSTGRES_HOST=$POSTGRES_HOST" \
-            "POSTGRES_PORT=$POSTGRES_PORT" \
-            "POSTGRES_USER=$POSTGRES_USER" \
+            "POSTGRES_DB=${POSTGRES_DB:-ycyw_chat_app}" \
+            "POSTGRES_HOST=${POSTGRES_HOST:-postgres}" \
+            "POSTGRES_PORT=${POSTGRES_PORT:-5432}" \
+            "POSTGRES_USER=${POSTGRES_USER:-postgres}" \
             "POSTGRES_PASSWORD=$POSTGRES_PASSWORD" \
             "JWT_SECRET_TOKEN=$JWT_SECRET_TOKEN" \
-            "MAIN_APP_PORT=$MAIN_APP_PORT" \
-            "FRONTEND_ORIGIN=$FRONTEND_ORIGIN" > .env
+            "MAIN_APP_PORT=${MAIN_APP_PORT:-8050}" \
+            "FRONTEND_ORIGIN=${FRONTEND_ORIGIN:-http://localhost:4250}" > .env
       - name: Run end-to-end tests
         run: make test-e2e
