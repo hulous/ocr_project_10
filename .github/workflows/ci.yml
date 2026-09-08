@@ -54,7 +54,7 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y google-chrome-stable
       - name: Run frontend tests
         working-directory: frontend
-        run: npm test -- --watch=false --browsers=ChromeHeadlessNoSandbox --code-coverage
+        run: npm test
       - name: Run frontend build
         working-directory: frontend
         run: npm run build
@@ -66,23 +66,32 @@ jobs:
         run: npm run format:check
 
   e2e:
-    if: ${{ github.event_name == 'workflow_dispatch' }}
     needs:
       - build-backend
       - build-frontend
     runs-on: ubuntu-latest
+    env:
+      POSTGRES_DB: ${{ vars.CI_POSTGRES_DB }}
+      POSTGRES_HOST: ${{ vars.CI_POSTGRES_HOST }}
+      POSTGRES_PORT: ${{ vars.CI_POSTGRES_PORT }}
+      POSTGRES_USER: ${{ vars.CI_POSTGRES_USER }}
+      POSTGRES_PASSWORD: ${{ secrets.CI_POSTGRES_PASSWORD }}
+      JWT_SECRET_TOKEN: ${{ secrets.CI_JWT_SECRET_TOKEN }}
+      MAIN_APP_PORT: ${{ vars.CI_MAIN_APP_PORT }}
+      FRONTEND_ORIGIN: ${{ vars.CI_FRONTEND_ORIGIN }}
     steps:
       - uses: actions/checkout@v5
       - name: Configure test environment
         run: |
+          jwt_secret="${JWT_SECRET_TOKEN:-$(openssl rand -base64 32)}"
           printf '%s\n' \
-            'POSTGRES_DB=ycyw_chat_app' \
-            'POSTGRES_HOST=postgres' \
-            'POSTGRES_PORT=5432' \
-            'POSTGRES_USER=ycyw' \
-            'POSTGRES_PASSWORD=ci-password' \
-            'JWT_SECRET_TOKEN=ci-only-test-secret-that-is-long-enough' \
-            'MAIN_APP_PORT=8050' \
-            'FRONTEND_ORIGIN=http://localhost:4250' > .env
+            "POSTGRES_DB=${POSTGRES_DB:-ycyw_chat_app}" \
+            "POSTGRES_HOST=${POSTGRES_HOST:-postgres}" \
+            "POSTGRES_PORT=${POSTGRES_PORT:-5432}" \
+            "POSTGRES_USER=${POSTGRES_USER:-postgres}" \
+            "POSTGRES_PASSWORD=$POSTGRES_PASSWORD" \
+            "JWT_SECRET_TOKEN=$jwt_secret" \
+            "MAIN_APP_PORT=${MAIN_APP_PORT:-8050}" \
+            "FRONTEND_ORIGIN=${FRONTEND_ORIGIN:-http://localhost:4250}" > .env
       - name: Run end-to-end tests
         run: make test-e2e

@@ -38,6 +38,7 @@ test-front: ## Run frontend unit tests in Docker
 	$(DOCKER) run --rm -v $(ROOT)/frontend:/workspace -w /workspace $(FRONT_TEST_IMAGE) bash -lc "npm install --legacy-peer-deps && npm test -- --watch=false"
 
 test-e2e: ## Run end-to-end tests against Docker Compose services
+	$(COMPOSE) down --volumes --remove-orphans
 	$(COMPOSE) up --build -d postgres backend frontend
 	$(COMPOSE) --profile e2e build e2e
 	$(COMPOSE) --profile e2e run --rm e2e

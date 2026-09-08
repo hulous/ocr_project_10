@@ -18,7 +18,8 @@
         name="name"
         type="text"
         autocomplete="name"
-        [(ngModel)]="name"
+        [ngModel]="name()"
+        (ngModelChange)="name.set($event)"
         required
       />
     </div>
@@ -30,7 +31,8 @@
         name="email"
         type="email"
         autocomplete="email"
-        [(ngModel)]="email"
+        [ngModel]="email()"
+        (ngModelChange)="email.set($event)"
         required
         email
         #emailField="ngModel"
@@ -48,19 +50,20 @@
         name="password"
         type="password"
         autocomplete="new-password"
-        [(ngModel)]="password"
+        [ngModel]="password()"
+        (ngModelChange)="password.set($event)"
         required
         minlength="8"
       />
       <small>8 caractères minimum.</small>
     </div>
 
-    @if (errorMessage) {
-      <p class="form-error" role="alert">{{ errorMessage }}</p>
+    @if (errorMessage()) {
+      <p class="form-error" role="alert">{{ errorMessage() }}</p>
     }
 
-    <button type="submit" [disabled]="registerForm.invalid || isSubmitting">
-      {{ isSubmitting ? "Création..." : "Créer mon compte" }}
+    <button type="submit" [disabled]="registerForm.invalid || isSubmitting()">
+      {{ isSubmitting() ? "Création..." : "Créer mon compte" }}
     </button>
     <p class="login-link">
       Déjà inscrit ? <a routerLink="/login">Se connecter</a>

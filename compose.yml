@@ -25,7 +25,7 @@ services:
         condition: service_healthy
     env_file: .env
     environment:
-      FRONTEND_ORIGIN: '${FRONTEND_ORIGIN}'
+      FRONTEND_ORIGIN: '${FRONTEND_ORIGIN},http://frontend:4200'
     ports:
       - '8050:8050'
 

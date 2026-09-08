@@ -26,6 +26,27 @@ button {
   font: inherit;
 }
 
+:focus-visible {
+  outline: 3px solid $color-primary;
+  outline-offset: 3px;
+}
+
+.skip-link {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 1;
+  padding: 0.65rem 0.9rem;
+  border-radius: 0.4rem;
+  background: $color-heading;
+  color: #ffffff;
+  transform: translateY(-200%);
+
+  &:focus-visible {
+    transform: translateY(0);
+  }
+}
+
 .app-shell {
   display: grid;
   min-height: 100vh;
@@ -50,6 +71,10 @@ button {
   border: 1px solid $color-border;
   border-radius: 0.75rem;
   background: #f8fafc;
+
+  &:focus-visible {
+    outline-offset: 2px;
+  }
 }
 
 .chat-message {
@@ -93,6 +118,10 @@ button {
     border: 1px solid $color-border;
     border-radius: 0.5rem;
     resize: vertical;
+
+    &:focus-visible {
+      outline-offset: 2px;
+    }
   }
 
   button {

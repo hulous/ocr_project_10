@@ -1,6 +1,6 @@
-import { Injectable } from "@angular/core";
+import { Injectable, signal } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { firstValueFrom, Subject, Subscription } from "rxjs";
+import { firstValueFrom, Subscription } from "rxjs";
 import { RxStomp } from "@stomp/rx-stomp";
 import SockJS from "sockjs-client";
 import { AuthService } from "./auth";
@@ -12,8 +12,7 @@ export { MessageDto } from "../models/message-dto.interface";
 @Injectable({ providedIn: "root" })
 export class ChatService {
   private client = new RxStomp();
-  private messagesSubject = new Subject<MessageDto>();
-  readonly messages$ = this.messagesSubject.asObservable();
+  readonly messages = signal<MessageDto | null>(null);
   private connected = false;
   private connectedConversationId: string | null = null;
   private messageSubscription?: Subscription;
@@ -23,7 +22,7 @@ export class ChatService {
     private http: HttpClient,
   ) {}
 
-  connect(conversationId: string): void {
+  async connect(conversationId: string): Promise<void> {
     if (this.connected && this.connectedConversationId === conversationId) {
       return;
     }
@@ -40,20 +39,18 @@ export class ChatService {
       reconnectDelay: 5000,
     });
 
-    void firstValueFrom(this.client.connected$).then(() => {
-      const stompSubscription = this.client.stompClient.subscribe(
-        `/topic/conversations/${conversationId}`,
-        (frame) => {
-          const message: MessageDto = JSON.parse(frame.body);
-          this.messagesSubject.next(message);
-        },
-      );
-      this.messageSubscription = new Subscription(() =>
-        stompSubscription.unsubscribe(),
-      );
-    });
-
     this.client.activate();
+    await firstValueFrom(this.client.connected$);
+    const stompSubscription = this.client.stompClient.subscribe(
+      `/topic/conversations/${conversationId}`,
+      (frame) => {
+        const message: MessageDto = JSON.parse(frame.body);
+        this.messages.set(message);
+      },
+    );
+    this.messageSubscription = new Subscription(() =>
+      stompSubscription.unsubscribe(),
+    );
     this.connected = true;
     this.connectedConversationId = conversationId;
   }

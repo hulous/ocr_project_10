@@ -11,9 +11,9 @@ describe("Authentication page components", () => {
     const component = new LoginComponent(auth, router, route);
 
     component.submit();
-    component.email = "client@example.com";
-    component.password = "secret";
-    component.isSubmitting = true;
+    component.email.set("client@example.com");
+    component.password.set("secret");
+    component.isSubmitting.set(true);
     component.submit();
 
     expect(auth.login).not.toHaveBeenCalled();
@@ -27,8 +27,8 @@ describe("Authentication page components", () => {
       snapshot: { queryParamMap: { get: () => "/chat?conversationId=1" } },
     } as unknown as ActivatedRoute;
     const component = new LoginComponent(auth, router, route);
-    component.email = "client@example.com";
-    component.password = "secret";
+    component.email.set("client@example.com");
+    component.password.set("secret");
 
     component.submit();
 
@@ -42,16 +42,16 @@ describe("Authentication page components", () => {
       snapshot: { queryParamMap: { get: () => null } },
     } as unknown as ActivatedRoute;
     const component = new LoginComponent(auth, router, route);
-    component.email = "client@example.com";
-    component.password = "secret";
+    component.email.set("client@example.com");
+    component.password.set("secret");
     auth.login.and.returnValue(throwError(() => ({ status: 401 })));
 
     component.submit();
 
-    expect(component.errorMessage).toBe(
+    expect(component.errorMessage()).toBe(
       "Adresse email ou mot de passe incorrect.",
     );
-    expect(component.isSubmitting).toBeFalse();
+    expect(component.isSubmitting()).toBeFalse();
 
     auth.login.and.returnValue(of({ token: "token", expiresIn: 3600 }));
     component.submit();
@@ -66,9 +66,9 @@ describe("Authentication page components", () => {
     const router = jasmine.createSpyObj("Router", ["navigate"]);
     const component = new RegisterComponent(auth, router);
 
-    component.name = "Client";
-    component.email = "client@example.com";
-    component.password = "long-enough-password";
+    component.name.set("Client");
+    component.email.set("client@example.com");
+    component.password.set("long-enough-password");
     component.submit();
 
     expect(auth.register).toHaveBeenCalledWith({
@@ -84,21 +84,21 @@ describe("Authentication page components", () => {
     const router = jasmine.createSpyObj("Router", ["navigate"]);
     const component = new RegisterComponent(auth, router);
 
-    component.name = "Client";
-    component.email = "client@example.com";
-    component.password = "short";
+    component.name.set("Client");
+    component.email.set("client@example.com");
+    component.password.set("short");
     component.submit();
     expect(auth.register).not.toHaveBeenCalled();
 
-    component.password = "long-enough-password";
-    component.isSubmitting = true;
+    component.password.set("long-enough-password");
+    component.isSubmitting.set(true);
     component.submit();
     expect(auth.register).not.toHaveBeenCalled();
 
-    component.isSubmitting = false;
+    component.isSubmitting.set(false);
     auth.register.and.returnValue(throwError(() => ({ status: 400 })));
     component.submit();
-    expect(component.errorMessage).toBe("Vérifiez les informations saisies.");
-    expect(component.isSubmitting).toBeFalse();
+    expect(component.errorMessage()).toBe("Vérifiez les informations saisies.");
+    expect(component.isSubmitting()).toBeFalse();
   });
 });

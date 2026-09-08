@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from "@angular/common/http";
-import { Component } from "@angular/core";
+import { Component, signal } from "@angular/core";
 import { Router } from "@angular/router";
 
 import { FormsModule } from "@angular/forms";
@@ -12,11 +12,11 @@ import { AuthService } from "../../core/services/auth";
   templateUrl: "./register.html",
 })
 export class RegisterComponent {
-  name = "";
-  email = "";
-  password = "";
-  errorMessage = "";
-  isSubmitting = false;
+  name = signal("");
+  email = signal("");
+  password = signal("");
+  errorMessage = signal("");
+  isSubmitting = signal(false);
 
   constructor(
     private readonly authenticationService: AuthService,
@@ -25,26 +25,31 @@ export class RegisterComponent {
 
   submit(): void {
     if (
-      this.isSubmitting ||
-      !this.name ||
-      !this.email ||
-      this.password.length < 8
+      this.isSubmitting() ||
+      !this.name() ||
+      !this.email() ||
+      this.password().length < 8
     ) {
       return;
     }
 
-    this.isSubmitting = true;
-    this.errorMessage = "";
+    this.isSubmitting.set(true);
+    this.errorMessage.set("");
     this.authenticationService
-      .register({ name: this.name, email: this.email, password: this.password })
+      .register({
+        name: this.name(),
+        email: this.email(),
+        password: this.password(),
+      })
       .subscribe({
         next: () => this.router.navigate(["/login"]),
         error: (error: HttpErrorResponse) => {
-          this.isSubmitting = false;
-          this.errorMessage =
+          this.isSubmitting.set(false);
+          this.errorMessage.set(
             error.status === 400
               ? "Vérifiez les informations saisies."
-              : "La création du compte est momentanément indisponible.";
+              : "La création du compte est momentanément indisponible.",
+          );
         },
       });
   }
