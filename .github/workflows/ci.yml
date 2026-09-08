@@ -83,13 +83,14 @@ jobs:
       - uses: actions/checkout@v5
       - name: Configure test environment
         run: |
+          jwt_secret="${JWT_SECRET_TOKEN:-$(openssl rand -base64 32)}"
           printf '%s\n' \
             "POSTGRES_DB=${POSTGRES_DB:-ycyw_chat_app}" \
             "POSTGRES_HOST=${POSTGRES_HOST:-postgres}" \
             "POSTGRES_PORT=${POSTGRES_PORT:-5432}" \
             "POSTGRES_USER=${POSTGRES_USER:-postgres}" \
             "POSTGRES_PASSWORD=$POSTGRES_PASSWORD" \
-            "JWT_SECRET_TOKEN=${JWT_SECRET_TOKEN:-ci-only-jwt-secret-change-me-2026}" \
+            "JWT_SECRET_TOKEN=$jwt_secret" \
             "MAIN_APP_PORT=${MAIN_APP_PORT:-8050}" \
             "FRONTEND_ORIGIN=${FRONTEND_ORIGIN:-http://localhost:4250}" > .env
       - name: Run end-to-end tests
