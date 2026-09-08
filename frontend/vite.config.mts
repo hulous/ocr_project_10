@@ -10,7 +10,12 @@ export default defineConfig({
     include: ['src/**/*.spec.ts'],
     coverage: {
       provider: 'v8',
-      thresholds: { statements: 90, branches: 90, functions: 90, lines: 90 },
+      thresholds: {
+        statements: 90,
+        branches: 90,
+        functions: 90,
+        lines: 90
+      },
     },
   },
 });
