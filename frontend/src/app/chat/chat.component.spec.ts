@@ -48,6 +48,7 @@ describe("ChatComponent", () => {
       id: "live-1",
       content: "Live message",
     });
+    TestBed.flushEffects();
     messagesSignal.set({
       ...historyMessage,
       conversationId: "other",

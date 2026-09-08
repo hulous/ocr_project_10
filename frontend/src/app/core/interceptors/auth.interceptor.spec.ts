@@ -71,4 +71,28 @@ describe("AuthInterceptor", () => {
     expect(authService.logout).toHaveBeenCalled();
     expect(router.navigate).toHaveBeenCalledWith(["/login"]);
   });
+
+  it("propagates non-401 errors without logging out", () => {
+    const authService = jasmine.createSpyObj("AuthService", [
+      "getToken",
+      "logout",
+    ]);
+    authService.getToken.and.returnValue("token");
+    const router = {
+      navigate: jasmine.createSpy("navigate"),
+    } as unknown as Router;
+    const error = { status: 500 };
+    const next = jasmine.createSpyObj("HttpHandler", ["handle"]);
+    next.handle.and.returnValue(throwError(() => error));
+    const request = new HttpRequest("GET", "/api/conversations/demo/messages");
+
+    new AuthInterceptor(authService, router)
+      .intercept(request, next)
+      .subscribe({
+        error: (receivedError) => expect(receivedError).toBe(error),
+      });
+
+    expect(authService.logout).not.toHaveBeenCalled();
+    expect(router.navigate).not.toHaveBeenCalled();
+  });
 });

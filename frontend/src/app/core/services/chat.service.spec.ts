@@ -83,22 +83,22 @@ describe("ChatService", () => {
     expect(service.messages()).toEqual(message);
   });
 
-  it("does not reconnect to the already active conversation", () => {
+  it("does not reconnect to the already active conversation", async () => {
     authService.getToken.and.returnValue("jwt-token");
 
-    service.connect("conversation-1");
+    await service.connect("conversation-1");
     client.configure.calls.reset();
-    service.connect("conversation-1");
+    await service.connect("conversation-1");
 
     expect(client.configure).not.toHaveBeenCalled();
   });
 
-  it("disconnects before switching conversations and publishes messages", () => {
+  it("disconnects before switching conversations and publishes messages", async () => {
     authService.getToken.and.returnValue("jwt-token");
-    service.connect("conversation-1");
+    await service.connect("conversation-1");
     client.deactivate.calls.reset();
 
-    service.connect("conversation-2");
+    await service.connect("conversation-2");
     service.send("conversation-2", "Hi there");
 
     expect(client.deactivate).toHaveBeenCalled();

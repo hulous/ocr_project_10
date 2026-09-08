@@ -47,7 +47,10 @@ export class ChatComponent {
     const messages = await firstValueFrom(
       this.chatService.loadHistory(this.conversationId),
     );
-    this.messages.set(messages.map((message) => this.toChatMessage(message)));
+    this.messages.update((currentMessages) => [
+      ...messages.map((message) => this.toChatMessage(message)),
+      ...currentMessages,
+    ]);
     this.isReady.set(true);
   }
 
