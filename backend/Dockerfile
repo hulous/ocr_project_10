@@ -18,5 +18,5 @@ RUN apt-get update \
 COPY --from=builder /workspace/target/*.jar ./app.jar
 
 EXPOSE 8080
-HEALTHCHECK --interval=5s --timeout=3s --retries=12 --start-period=20s CMD curl --fail --silent http://127.0.0.1:8050/actuator/health || exit 1
+HEALTHCHECK --interval=5s --timeout=3s --retries=18 --start-period=60s CMD curl --fail --silent http://127.0.0.1:8050/actuator/health || exit 1
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]
