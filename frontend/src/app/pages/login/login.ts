@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, signal } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { HttpErrorResponse } from "@angular/common/http";
 
@@ -12,10 +12,10 @@ import { AuthService } from "../../core/services/auth";
   templateUrl: "./login.html",
 })
 export class LoginComponent {
-  email = "";
-  password = "";
-  errorMessage = "";
-  isSubmitting = false;
+  email = signal("");
+  password = signal("");
+  errorMessage = signal("");
+  isSubmitting = signal(false);
 
   constructor(
     private readonly authenticationService: AuthService,
@@ -24,14 +24,14 @@ export class LoginComponent {
   ) {}
 
   submit(): void {
-    if (this.isSubmitting || !this.email || !this.password) {
+    if (this.isSubmitting() || !this.email() || !this.password()) {
       return;
     }
 
-    this.isSubmitting = true;
-    this.errorMessage = "";
+    this.isSubmitting.set(true);
+    this.errorMessage.set("");
     this.authenticationService
-      .login({ email: this.email, password: this.password })
+      .login({ email: this.email(), password: this.password() })
       .subscribe({
         next: () => {
           const returnUrl =
@@ -39,11 +39,12 @@ export class LoginComponent {
           this.router.navigateByUrl(returnUrl);
         },
         error: (error: HttpErrorResponse) => {
-          this.isSubmitting = false;
-          this.errorMessage =
+          this.isSubmitting.set(false);
+          this.errorMessage.set(
             error.status === 401
               ? "Adresse email ou mot de passe incorrect."
-              : "La connexion est momentanément indisponible.";
+              : "La connexion est momentanément indisponible.",
+          );
         },
       });
   }

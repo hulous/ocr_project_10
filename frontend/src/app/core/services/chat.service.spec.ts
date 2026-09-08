@@ -63,8 +63,6 @@ describe("ChatService", () => {
 
   it("connects with the bearer token and forwards incoming messages", async () => {
     authService.getToken.and.returnValue("jwt-token");
-    let received: MessageDto | undefined;
-    service.messages$.subscribe((message) => (received = message));
 
     service.connect("conversation-1");
     await Promise.resolve();
@@ -82,7 +80,7 @@ describe("ChatService", () => {
       jasmine.any(Function),
     );
     subscribeSpy.calls.mostRecent().args[1](frame);
-    expect(received).toEqual(message);
+    expect(service.messages()).toEqual(message);
   });
 
   it("does not reconnect to the already active conversation", () => {

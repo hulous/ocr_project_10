@@ -8,7 +8,9 @@
     aria-label="Messages du tchat"
     tabindex="0"
   >
-    @if (messages().length) {
+    @if (!isReady()) {
+      <p>Chargement des messages...</p>
+    } @else if (messages().length) {
       @for (message of messages(); track message) {
         <article class="chat-message">
           <strong>{{ message.author }}</strong>

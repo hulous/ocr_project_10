@@ -1,12 +1,13 @@
 import { ActivatedRoute } from "@angular/router";
-import { Subject, of } from "rxjs";
+import { signal } from "@angular/core";
+import { of } from "rxjs";
 import { ChatComponent } from "./chat.component";
 import { ChatService, MessageDto } from "../core/services/chat.service";
 import { TestBed } from "@angular/core/testing";
 
 describe("ChatComponent", () => {
   let component: ChatComponent;
-  let messagesSubject: Subject<MessageDto>;
+  let messagesSignal: ReturnType<typeof signal<MessageDto | null>>;
   let chatService: jasmine.SpyObj<ChatService>;
   const historyMessage: MessageDto = {
     id: "history-1",
@@ -17,15 +18,15 @@ describe("ChatComponent", () => {
   };
 
   beforeEach(() => {
-    messagesSubject = new Subject<MessageDto>();
+    messagesSignal = signal<MessageDto | null>(null);
     chatService = jasmine.createSpyObj("ChatService", [
       "loadHistory",
       "connect",
       "send",
       "disconnect",
     ]);
-    Object.defineProperty(chatService, "messages$", {
-      value: messagesSubject.asObservable(),
+    Object.defineProperty(chatService, "messages", {
+      value: messagesSignal,
     });
     chatService.loadHistory.and.returnValue(of([historyMessage]));
     const route = {
@@ -42,12 +43,12 @@ describe("ChatComponent", () => {
 
   it("loads history, connects, and accepts messages for the active conversation", async () => {
     await Promise.resolve();
-    messagesSubject.next({
+    messagesSignal.set({
       ...historyMessage,
       id: "live-1",
       content: "Live message",
     });
-    messagesSubject.next({
+    messagesSignal.set({
       ...historyMessage,
       conversationId: "other",
       id: "ignored",

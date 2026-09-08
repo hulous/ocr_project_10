@@ -1,9 +1,8 @@
-import { Component, DestroyRef, inject, signal } from "@angular/core";
+import { Component, DestroyRef, effect, inject, signal } from "@angular/core";
 
 import { ActivatedRoute } from "@angular/router";
 import { FormsModule } from "@angular/forms";
 import { firstValueFrom } from "rxjs";
-import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { ChatService, MessageDto } from "../core/services/chat.service";
 import { ChatMessage } from "../core/models/chat-message.interface";
 
@@ -17,21 +16,24 @@ export class ChatComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly chatService = inject(ChatService);
   private readonly destroyRef = inject(DestroyRef);
+
   conversationId = this.defaultConversationId;
   draft = signal("");
   messages = signal<ChatMessage[]>([]);
+  isReady = signal(false);
 
   constructor() {
-    this.chatService.messages$
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((message) => {
+    effect(() => {
+      const message = this.chatService.messages();
+      if (message) {
         if (message?.conversationId === this.conversationId) {
           this.messages.update((messages) => [
             ...messages,
             this.toChatMessage(message),
           ]);
         }
-      });
+      }
+    });
     this.destroyRef.onDestroy(() => this.chatService.disconnect());
 
     void this.loadConversation();
@@ -41,11 +43,12 @@ export class ChatComponent {
     this.conversationId =
       this.route.snapshot.paramMap.get("conversationId") ??
       this.defaultConversationId;
+    await this.chatService.connect(this.conversationId);
     const messages = await firstValueFrom(
       this.chatService.loadHistory(this.conversationId),
     );
     this.messages.set(messages.map((message) => this.toChatMessage(message)));
-    this.chatService.connect(this.conversationId);
+    this.isReady.set(true);
   }
 
   sendMessage() {
