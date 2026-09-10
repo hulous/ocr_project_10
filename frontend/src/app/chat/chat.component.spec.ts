@@ -1,14 +1,17 @@
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { signal } from "@angular/core";
 import { of } from "rxjs";
 import { ChatComponent } from "./chat.component";
 import { ChatService, MessageDto } from "../core/services/chat.service";
+import { AuthService } from "../core/services/auth";
 import { TestBed } from "@angular/core/testing";
 
 describe("ChatComponent", () => {
   let component: ChatComponent;
   let messagesSignal: ReturnType<typeof signal<MessageDto | null>>;
   let chatService: jasmine.SpyObj<ChatService>;
+  let authService: jasmine.SpyObj<AuthService>;
+  let router: jasmine.SpyObj<Router>;
   const historyMessage: MessageDto = {
     id: "history-1",
     conversationId: "conversation-1",
@@ -25,6 +28,8 @@ describe("ChatComponent", () => {
       "send",
       "disconnect",
     ]);
+    authService = jasmine.createSpyObj("AuthService", ["logout"]);
+    router = jasmine.createSpyObj("Router", ["navigate"]);
     Object.defineProperty(chatService, "messages", {
       value: messagesSignal,
     });
@@ -36,6 +41,8 @@ describe("ChatComponent", () => {
       providers: [
         { provide: ActivatedRoute, useValue: route },
         { provide: ChatService, useValue: chatService },
+        { provide: AuthService, useValue: authService },
+        { provide: Router, useValue: router },
       ],
     });
     component = TestBed.runInInjectionContext(() => new ChatComponent());
@@ -92,6 +99,13 @@ describe("ChatComponent", () => {
 
     expect(chatService.send).toHaveBeenCalledWith("conversation-1", "Hello");
     expect(component.draft()).toBe("");
+  });
+
+  it("logs out and navigates to login", () => {
+    component.logout();
+
+    expect(authService.logout).toHaveBeenCalled();
+    expect(router.navigate).toHaveBeenCalledWith(["/login"]);
   });
 
   it("sends the draft when Enter is pressed", () => {
