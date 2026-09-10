@@ -10,7 +10,7 @@
     sans-serif;
   line-height: 1.5;
   color: $color-text;
-  background-color: #f8fafc;
+  background-color: $color-canvas;
 }
 
 body {
@@ -39,7 +39,7 @@ button {
   padding: 0.65rem 0.9rem;
   border-radius: 0.4rem;
   background: $color-heading;
-  color: #ffffff;
+  color: $color-on-primary;
   transform: translateY(-200%);
 
   &:focus-visible {
@@ -59,10 +59,10 @@ button {
 
 .app-card {
   padding: 1.5rem;
-  border: 1px solid #d1d5db;
+  border: 1px solid $color-border;
   border-radius: 0.75rem;
-  background: #ffffff;
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
+  background: $color-surface;
+  box-shadow: 0 1px 2px $color-shadow;
 }
 
 .chat-window {
@@ -70,7 +70,7 @@ button {
   padding: 1rem;
   border: 1px solid $color-border;
   border-radius: 0.75rem;
-  background: #f8fafc;
+  background: $color-chat-surface;
 
   &:focus-visible {
     outline-offset: 2px;
@@ -87,7 +87,7 @@ button {
     padding: 0.6rem 1rem;
     border: 1px solid $color-primary;
     border-radius: 0.5rem;
-    background: #ffffff;
+    background: $color-surface;
     color: $color-primary;
     cursor: pointer;
   }
@@ -96,7 +96,7 @@ button {
 .chat-message {
   margin-bottom: 1rem;
   padding-bottom: 0.75rem;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid $color-message-border;
 
   &:last-child {
     margin-bottom: 0;
@@ -113,7 +113,7 @@ button {
   time {
     display: block;
     margin-bottom: 0.5rem;
-    color: #64748b;
+    color: $color-muted;
     font-size: 0.875rem;
   }
 }
@@ -146,7 +146,7 @@ button {
     border: none;
     border-radius: 0.5rem;
     background: $color-primary;
-    color: #ffffff;
+    color: $color-on-primary;
     cursor: pointer;
 
     &:disabled {
