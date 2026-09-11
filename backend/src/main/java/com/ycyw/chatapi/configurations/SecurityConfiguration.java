@@ -31,8 +31,9 @@ public class SecurityConfiguration {
   };
 
   public SecurityConfiguration(
-      JwtAuthenticationFilter jwtAuthenticationFilter,
-      AuthenticationProvider authenticationProvider) {
+    JwtAuthenticationFilter jwtAuthenticationFilter,
+    AuthenticationProvider authenticationProvider
+  ) {
     this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     this.authenticationProvider = authenticationProvider;
   }
@@ -41,42 +42,38 @@ public class SecurityConfiguration {
   SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     AuthenticationEntryPoint unauthorizedEntryPoint = this::writeUnauthorized;
 
-    http.
-      csrf(AbstractHttpConfigurer::disable).
-      authorizeHttpRequests(
-        authorize ->
-          authorize.
-            requestMatchers(PUBLIC_URLS).
-            permitAll().
-            requestMatchers("/actuator/health").
-            permitAll().
-            requestMatchers(PathPatternRequestMatcher.withDefaults().matcher("/ws/**")).
-            permitAll().
-            anyRequest().
-            authenticated()
-      ).
-      exceptionHandling(
-        exceptionHandling ->
-          exceptionHandling.
-            authenticationEntryPoint(unauthorizedEntryPoint).
-            accessDeniedHandler(
-              (request, response, exception) -> writeUnauthorized(request, response, null)
-            )
-      ).
-      sessionManagement(
-        session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-      ).
-      authenticationProvider(authenticationProvider).
-      addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class).
-      formLogin(AbstractHttpConfigurer::disable).
-      httpBasic(AbstractHttpConfigurer::disable);
+    http
+      .csrf(AbstractHttpConfigurer::disable)
+      .authorizeHttpRequests(authorize -> authorize
+        .requestMatchers(PUBLIC_URLS)
+        .permitAll()
+        .requestMatchers("/actuator/health")
+        .permitAll()
+        .requestMatchers(PathPatternRequestMatcher.withDefaults().matcher("/ws/**"))
+        .permitAll()
+        .anyRequest()
+        .authenticated()
+      )
+      .exceptionHandling(exceptionHandling -> exceptionHandling
+        .authenticationEntryPoint(unauthorizedEntryPoint)
+        .accessDeniedHandler(
+          (request, response, exception) -> writeUnauthorized(request, response, null)
+        )
+      )
+      .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+      .authenticationProvider(authenticationProvider)
+      .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+      .formLogin(AbstractHttpConfigurer::disable)
+      .httpBasic(AbstractHttpConfigurer::disable);
 
     return http.build();
   }
 
   private void writeUnauthorized(
-      HttpServletRequest request, HttpServletResponse response, AuthenticationException exception)
-      throws IOException {
+    HttpServletRequest request,
+    HttpServletResponse response,
+    AuthenticationException exception
+  ) throws IOException {
     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
     response.setContentType("application/json");
     response.getWriter().write("{\"message\":\"Unauthorized request\"}");

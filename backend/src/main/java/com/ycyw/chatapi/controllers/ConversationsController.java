@@ -31,28 +31,27 @@ public class ConversationsController {
 
   @GetMapping("/{conversationId}/messages")
   @Operation(
-      summary = "Get conversation message history",
-      security = {@SecurityRequirement(name = "bearerAuth")})
+    summary = "Get conversation message history",
+    security = {@SecurityRequirement(name = "bearerAuth")})
   @ApiResponses(
-      value = {
-        @ApiResponse(
-            responseCode = "200",
-            description = "Conversation messages returned",
-            content =
-                @Content(
-                    array = @ArraySchema(schema = @Schema(implementation = MessageDto.class)))),
-        @ApiResponse(
-            responseCode = "401",
-            description = "Unauthorized request",
-            content = @Content(schema = @Schema(implementation = ApiMessageResponse.class))),
-        @ApiResponse(
-            responseCode = "500",
-            description = "Server error",
-            content = @Content(schema = @Schema(implementation = ApiMessageResponse.class)))
+    value = {
+      @ApiResponse(
+        responseCode = "200",
+        description = "Conversation messages returned",
+        content = @Content(array = @ArraySchema(schema = @Schema(implementation = MessageDto.class)))),
+      @ApiResponse(
+        responseCode = "401",
+        description = "Unauthorized request",
+        content = @Content(schema = @Schema(implementation = ApiMessageResponse.class))),
+      @ApiResponse(
+        responseCode = "500",
+        description = "Server error",
+        content = @Content(schema = @Schema(implementation = ApiMessageResponse.class)))
       })
   public List<MessageDto> getHistory(
-      @Parameter(description = "Conversation identifier", required = true) @PathVariable
-          String conversationId) {
+    @Parameter(description = "Conversation identifier", required = true)
+    @PathVariable String conversationId
+  ) {
     return chatService.getConversationHistory(conversationId);
   }
 }

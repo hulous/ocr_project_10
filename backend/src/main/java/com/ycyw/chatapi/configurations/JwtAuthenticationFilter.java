@@ -21,24 +21,24 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-  private static final List<String> PUBLIC_PATH_PREFIXES =
-      List.of(
-          "/api/auth/login",
-          "/api/auth/register",
-          "/v3/api-docs",
-          "/swagger-ui",
-          "/uploads/",
-          "/ws/");
+  private static final List<String> PUBLIC_PATH_PREFIXES = List.of(
+    "/api/auth/login",
+    "/api/auth/register",
+    "/v3/api-docs",
+    "/swagger-ui",
+    "/uploads/",
+    "/ws/"
+  );
 
   private final HandlerExceptionResolver handlerExceptionResolver;
-
   private final JwtService jwtService;
   private final UserDetailsService userDetailsService;
 
   public JwtAuthenticationFilter(
       JwtService jwtService,
       UserDetailsService userDetailsService,
-      @Qualifier("handlerExceptionResolver") HandlerExceptionResolver handlerExceptionResolver) {
+      @Qualifier("handlerExceptionResolver") HandlerExceptionResolver handlerExceptionResolver
+  ) {
     this.jwtService = jwtService;
     this.userDetailsService = userDetailsService;
     this.handlerExceptionResolver = handlerExceptionResolver;
@@ -53,8 +53,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
   @Override
   protected void doFilterInternal(
-      HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-      throws ServletException, IOException {
+    HttpServletRequest request,
+    HttpServletResponse response,
+    FilterChain filterChain
+  ) throws ServletException, IOException {
     final String authHeader = request.getHeader("Authorization");
 
     if (authHeader == null || !authHeader.startsWith("Bearer ")) {
@@ -72,12 +74,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
 
         if (jwtService.isTokenValid(jwt, userDetails)) {
-          UsernamePasswordAuthenticationToken authToken =
-              new UsernamePasswordAuthenticationToken(
-                  userDetails, null, userDetails.getAuthorities());
+          UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+            userDetails,
+            null,
+            userDetails.getAuthorities()
+          );
 
           authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
           SecurityContextHolder.getContext().setAuthentication(authToken);
         }
       }

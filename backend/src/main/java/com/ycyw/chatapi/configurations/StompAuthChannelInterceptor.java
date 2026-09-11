@@ -24,15 +24,17 @@ public class StompAuthChannelInterceptor implements ChannelInterceptor {
   private final JwtService jwtService;
   private final UserDetailsService userDetailsService;
 
-  public StompAuthChannelInterceptor(JwtService jwtService, UserDetailsService userDetailsService) {
+  public StompAuthChannelInterceptor(
+    JwtService jwtService,
+    UserDetailsService userDetailsService
+  ) {
     this.jwtService = jwtService;
     this.userDetailsService = userDetailsService;
   }
 
   @Override
   public Message<?> preSend(Message<?> message, MessageChannel channel) {
-    StompHeaderAccessor accessor =
-        MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
+    StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
     if (accessor == null || !accessor.isMutable()) {
       accessor = StompHeaderAccessor.wrap(message);
     }
@@ -56,8 +58,11 @@ public class StompAuthChannelInterceptor implements ChannelInterceptor {
         throw new AuthenticationCredentialsNotFoundException("Token invalide ou expiré");
       }
 
-      UsernamePasswordAuthenticationToken authentication =
-          new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+      UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+        userDetails,
+        null,
+        userDetails.getAuthorities()
+      );
 
       accessor.setUser(authentication);
     }

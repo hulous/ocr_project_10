@@ -28,27 +28,27 @@ public class UsersController {
 
   @GetMapping("/{id}")
   @Operation(
-      summary = "Show one user by id",
-      security = {@SecurityRequirement(name = "bearerAuth")})
+    summary = "Show one user by id",
+    security = {@SecurityRequirement(name = "bearerAuth")})
   @ApiResponses(
-      value = {
-        @ApiResponse(
-            responseCode = "200",
-            description = "User found",
-            content = @Content(schema = @Schema(implementation = UserResponse.class))),
-        @ApiResponse(
-            responseCode = "401",
-            description = "Unauthorized request",
-            content = @Content(schema = @Schema(implementation = ApiMessageResponse.class))),
-        @ApiResponse(
-            responseCode = "404",
-            description = "User not found",
-            content = @Content(schema = @Schema(implementation = ApiMessageResponse.class))),
-        @ApiResponse(
-            responseCode = "500",
-            description = "Server error",
-            content = @Content(schema = @Schema(implementation = ApiMessageResponse.class)))
-      })
+    value = {
+      @ApiResponse(
+        responseCode = "200",
+        description = "User found",
+        content = @Content(schema = @Schema(implementation = UserResponse.class))),
+      @ApiResponse(
+        responseCode = "401",
+        description = "Unauthorized request",
+        content = @Content(schema = @Schema(implementation = ApiMessageResponse.class))),
+      @ApiResponse(
+        responseCode = "404",
+        description = "User not found",
+        content = @Content(schema = @Schema(implementation = ApiMessageResponse.class))),
+      @ApiResponse(
+        responseCode = "500",
+        description = "Server error",
+        content = @Content(schema = @Schema(implementation = ApiMessageResponse.class)))
+    })
   public ResponseEntity<UserResponse> show(@PathVariable Integer id) {
     return ResponseEntity.ok(userService.show(id));
   }

@@ -13,10 +13,10 @@ public class UserMapper {
     }
 
     return new UserResponse()
-        .setId(user.getId())
-        .setName(user.getName())
-        .setEmail(user.getEmail())
-        .setCreatedAt(user.getCreatedAt())
-        .setUpdatedAt(user.getUpdatedAt());
+      .setId(user.getId())
+      .setName(user.getName())
+      .setEmail(user.getEmail())
+      .setCreatedAt(user.getCreatedAt())
+      .setUpdatedAt(user.getUpdatedAt());
   }
 }
