@@ -42,23 +42,21 @@ public class AuthenticationService {
       throw new IllegalArgumentException("A user with this email already exists");
     }
 
-    User user =
-        new User()
-            .setName(input.getName())
-            .setEmail(input.getEmail())
-            .setPassword(passwordEncoder.encode(input.getPassword()));
+    User user = new User()
+      .setName(input.getName())
+      .setEmail(input.getEmail())
+      .setPassword(passwordEncoder.encode(input.getPassword()));
 
     return userRepository.save(user);
   }
 
   public User authenticate(LoginUserDto input) {
-    UsernamePasswordAuthenticationToken authToken =
-        new UsernamePasswordAuthenticationToken(input.getEmail(), input.getPassword());
+    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(input.getEmail(), input.getPassword());
     authenticationManager.authenticate(authToken);
 
     return userRepository
-        .findByEmail(input.getEmail())
-        .orElseThrow(() -> new UsernameNotFoundException("Invalid credentials"));
+      .findByEmail(input.getEmail())
+      .orElseThrow(() -> new UsernameNotFoundException("Invalid credentials"));
   }
 
   public UserResponse registrateResponse(RegisterUserDto registerUserDto) {

@@ -15,8 +15,7 @@ import org.springframework.util.StringUtils;
 
 @Configuration(proxyBeanMethods = false)
 public class DatabaseCreationConfiguration {
-  private static final Pattern POSTGRES_URL_PATTERN =
-      Pattern.compile("^jdbc:postgresql://([^/]+)/([^?]+)(?:\\?(.*))?$");
+  private static final Pattern POSTGRES_URL_PATTERN = Pattern.compile("^jdbc:postgresql://([^/]+)/([^?]+)(?:\\?(.*))?$");
 
   @Bean
   public DataSource dataSource(DataSourceProperties properties) {
@@ -50,15 +49,13 @@ public class DatabaseCreationConfiguration {
         createDatabase(adminConnection, databaseName);
       }
     } catch (SQLException ex) {
-      throw new IllegalStateException(
-          "Unable to create PostgreSQL database '" + databaseName + "'.", ex);
+      throw new IllegalStateException("Unable to create PostgreSQL database '" + databaseName + "'.", ex);
     }
   }
 
   private static boolean databaseExists(Connection connection, String databaseName)
       throws SQLException {
-    try (PreparedStatement stmt =
-        connection.prepareStatement("SELECT 1 FROM pg_database WHERE datname = ?")) {
+    try (PreparedStatement stmt = connection.prepareStatement("SELECT 1 FROM pg_database WHERE datname = ?")) {
       stmt.setString(1, databaseName);
 
       try (ResultSet rs = stmt.executeQuery()) {
@@ -67,8 +64,7 @@ public class DatabaseCreationConfiguration {
     }
   }
 
-  private static void createDatabase(Connection connection, String databaseName)
-      throws SQLException {
+  private static void createDatabase(Connection connection, String databaseName) throws SQLException {
     String quotedName = "\"" + databaseName.replace("\"", "\"\"") + "\"";
 
     try (PreparedStatement stmt = connection.prepareStatement("CREATE DATABASE " + quotedName)) {

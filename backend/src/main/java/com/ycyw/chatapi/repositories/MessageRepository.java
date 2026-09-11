@@ -12,6 +12,5 @@ public interface MessageRepository extends JpaRepository<Message, UUID> {
 
   List<Message> findBySenderIdOrderBySentAtAsc(Integer senderId);
 
-  List<Message> findByConversationIdAndSenderIdOrderBySentAtAsc(
-      String conversationId, Integer senderId);
+  List<Message> findByConversationIdAndSenderIdOrderBySentAtAsc(String conversationId, Integer senderId);
 }
